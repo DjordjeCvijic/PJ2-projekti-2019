@@ -1,7 +1,7 @@
 package model;
 import java.util.Random;
 
-public class Rocket {
+public class Rocket extends Thread {
 
     private double range;
     private double heightOfTheFlight;
@@ -29,7 +29,7 @@ public class Rocket {
         return mark;
     }
 
-    public int getId(){
+    public int getIdOfRocket(){
         return id;
     }
     void setEntrance(int skyX,int skyY){
@@ -59,6 +59,24 @@ public class Rocket {
 
     public int getYPosition() {
         return yPosition;
+    }
+    public void run(){
+
+        while(xPosition<airspace.getSkyX() &&yPosition<airspace.getSkyY()){
+
+            try{
+                sleep(flightSpeed*1000);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            airspace.flight(xPosition,yPosition,flightIndex);
+
+
+
+
+
+        }
     }
 
 

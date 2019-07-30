@@ -32,8 +32,11 @@ public class Radar extends Thread {
         while (true) {
 
             synchronized (airspace) {
+
                 try {
                     synchronized (f) {
+
+
 
                         BufferedWriter out = new BufferedWriter(new PrintWriter(f));
                         out.write(skyX+"#"+skyY);
@@ -48,6 +51,7 @@ public class Radar extends Thread {
 
 
                         out.close();
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -57,7 +61,6 @@ public class Radar extends Thread {
 
             }
             try {
-                System.out.println("radar");
 
                 sleep(intervalForMap * 1000);
             } catch (Exception e) {

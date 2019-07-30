@@ -8,7 +8,7 @@ import java.util.Random;
 
 
 
-public class Aircraft {
+public class Aircraft extends Thread {
     private String model;
     private int id;
     private double heightOfTheFlight;
@@ -45,7 +45,7 @@ public class Aircraft {
     public String getMark(){
         return mark;
     }
-    public int getId(){
+    public int getIdOfAircraft(){
         return id;
     }
     void setEntrance(int skyX,int skyY){
@@ -75,5 +75,35 @@ public class Aircraft {
 
     public int getYPosition() {
         return yPosition;
+    }
+
+    public void run(){
+
+        int c;
+        do{
+
+            try{
+                sleep(flightSpeed*1000);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            c=airspace.flight(xPosition,yPosition,flightIndex);
+            if(c==0){
+                yPosition--;
+
+            }else if(c==1){
+                xPosition--;
+
+
+            } else if(c==2){
+                yPosition++;
+
+            } else if (c==3){
+                xPosition++;
+
+            }
+
+        }while(c!=-1);
     }
 }

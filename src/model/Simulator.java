@@ -12,7 +12,7 @@ public class Simulator extends Thread {
     private String[] aircraftToAdd = {"PrA", "PrH", "TrA", "TrH", "FrA", "FrH", "IPR", "Drn", "MHA", "MBA", "MiR"};
     private Map aircrafts;
     private Map rockets;
-    private Airspace airspace;
+    private final Airspace airspace;
     private long timeStamp;
     private Random random=new Random();
 
@@ -48,7 +48,7 @@ public class Simulator extends Thread {
 
     public void run(){
         File f = new File("src" + File.separator + "resources" + File.separator + "config.properties.txt");
-        System.out.println("radi");
+
         this.timeStamp=f.lastModified();
         while(true){
 
@@ -60,14 +60,15 @@ public class Simulator extends Thread {
             Rocket newRocket;
 
             synchronized (airspace) {
+
                 if ("PrA".equals(nextAircraft)) {
                     newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
                             random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
-
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 } else if ("PrH".equals(nextAircraft)) {
                     newAircraft = new PessengerHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -75,7 +76,8 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 } else if ("TrA".equals(nextAircraft)) {
                     newAircraft = new TransportAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -83,7 +85,8 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 } else if ("TrH".equals(nextAircraft)) {
                     newAircraft = new TransportHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -91,7 +94,8 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                   newAircraft.start();
 
                 } else if ("FrA".equals(nextAircraft)) {
                     newAircraft = new FireAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -99,7 +103,8 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 } else if ("FrH".equals(nextAircraft)) {
                     newAircraft = new FireHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -107,14 +112,16 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 } else if ("IPR".equals(nextAircraft)) {
                     newRocket = new IceProtectionRocket(random.nextDouble() * 100, random.nextDouble() * 100, airspace);
                     newRocket.setEntrance(skyX, skyY);
 
                     rockets.put(newRocket.getId(), newRocket);
-                    airspace.addObjectOnSky(newRocket.getMark(), newRocket.getXPosition(), newRocket.getYPosition(), newRocket.getId());
+                    airspace.addObjectOnSky(newRocket.getMark(), newRocket.getXPosition(), newRocket.getYPosition(), newRocket.getIdOfRocket());
+                    newRocket.start();
 
                 } else if ("Drn".equals(nextAircraft)) {
                     newAircraft = new Drone(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
@@ -122,14 +129,16 @@ public class Simulator extends Thread {
                     newAircraft.setEntrance(skyX, skyY);
 
                     aircrafts.put(newAircraft.getId(), newAircraft);
-                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getId());
+                    airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                    newAircraft.start();
 
                 }
+
             }
 
-           airspace.print(skyX,skyY);
+           //airspace.print(skyX,skyY);
             try {
-                System.out.println("Simulator");
+
                 sleep(timeInterval * 1000);
             }catch (Exception e){
                 e.printStackTrace();

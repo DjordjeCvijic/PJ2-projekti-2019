@@ -49,4 +49,50 @@ public class Airspace {
 
         return(fields[i][j].getId()+"#"+fields[i][j].getAircraftMark()+"#"+i+"#"+j);
     }
+
+    public synchronized int flight(int xPosition, int yPosition, int flightIndex) {
+       int f=flightIndex;
+        if(flightIndex==0){
+            if(yPosition==0){
+                f=-1;
+                numberOfAircrafts--;
+            }
+            else{
+                fields[xPosition][yPosition-1].setAircraftMark(fields[xPosition][yPosition].getAircraftMark());
+                fields[xPosition][yPosition-1].setId(fields[xPosition][yPosition].getId());
+
+            }
+        }else if(flightIndex==1){
+            if(xPosition==0){
+                f=-1;
+                numberOfAircrafts--;
+            }
+            else{
+                fields[xPosition-1][yPosition].setAircraftMark(fields[xPosition][yPosition].getAircraftMark());
+                fields[xPosition-1][yPosition].setId(fields[xPosition][yPosition].getId());
+
+            }
+        }else if(flightIndex==2){
+            if(yPosition==skyY-1){
+                f=-1;
+                numberOfAircrafts--;
+            }
+            else{
+                fields[xPosition][yPosition+1].setAircraftMark(fields[xPosition][yPosition].getAircraftMark());
+                fields[xPosition][yPosition+1].setId(fields[xPosition][yPosition].getId());
+            }
+        }else{
+            if(xPosition==skyX-1){
+                f=-1;
+                numberOfAircrafts--;
+            }
+            else{
+                fields[xPosition+1][yPosition].setAircraftMark(fields[xPosition][yPosition].getAircraftMark());
+                fields[xPosition+1][yPosition].setId(fields[xPosition][yPosition].getId());
+            }
+        }
+        fields[xPosition][yPosition].setId(0);
+        fields[xPosition][yPosition].setAircraftMark("   ");
+        return f;
+    }
 }

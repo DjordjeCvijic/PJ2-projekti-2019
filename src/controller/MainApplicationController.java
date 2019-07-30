@@ -49,7 +49,8 @@ public class MainApplicationController extends Thread implements Initializable  
 
 
             file=Radar.f;
-           // start();
+            //file=new File("src" + File.separator + "resources" + File.separator + "map.txt");
+            start();
 
 
     }
@@ -61,7 +62,7 @@ public class MainApplicationController extends Thread implements Initializable  
 
         try{
 
-            sleep(1000);
+            //sleep(500);
 
             BufferedReader in=new BufferedReader(new FileReader(file));
             String []tmp=in.readLine().split("#");
@@ -82,12 +83,14 @@ public class MainApplicationController extends Thread implements Initializable  
         }catch(Exception e){
             e.printStackTrace();
         }
-        this.timeStamp=file.lastModified();
+        timeStamp=file.lastModified();
             while(true){
                 try{
                     if(isFileUpdated(file)) {
 
+
                         synchronized (file) {
+
                             BufferedReader in = new BufferedReader(new FileReader(file));
                             in.readLine();
                             String tmp[];
@@ -104,6 +107,7 @@ public class MainApplicationController extends Thread implements Initializable  
                                     print();
                                 }
                             });
+
 
 
                         }
@@ -210,8 +214,9 @@ public class MainApplicationController extends Thread implements Initializable  
 
         long time;
         time=file.lastModified();
-        if (this.timeStamp != time) {
-            this.timeStamp = time;
+
+        if (timeStamp != time) {
+            timeStamp = time;
             return true;
         }
 
