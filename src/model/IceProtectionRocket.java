@@ -1,7 +1,7 @@
 package model;
 
 public class IceProtectionRocket extends Rocket {
-    public IceProtectionRocket(double range,double height){
-        super( range, height,"IPR");
+    public IceProtectionRocket(double range,double height,Airspace a){
+        super( range, height,"IPR",a);
     }
 }

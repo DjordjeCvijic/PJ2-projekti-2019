@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 
 <AnchorPane fx:id="aPanel" prefHeight="556.0" prefWidth="758.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainApplicationController">
    <children>
-      <Label layoutX="14.0" layoutY="527.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="285.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="307.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="329.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="351.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="373.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="395.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="505.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="483.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="461.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="439.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
-      <Label layoutX="14.0" layoutY="417.0" prefHeight="21.0" prefWidth="142.0" text="D-Drone" />
+      <Label layoutX="14.0" layoutY="461.0" prefHeight="21.0" prefWidth="142.0" text="Drn-Drone" />
+      <Label layoutX="14.0" layoutY="307.0" prefHeight="21.0" prefWidth="142.0" text="PrA-Pessenger Airplane" />
+      <Label layoutX="14.0" layoutY="329.0" prefHeight="21.0" prefWidth="142.0" text="PrH-Pessenger Helicopter" />
+      <Label layoutX="14.0" layoutY="351.0" prefHeight="21.0" prefWidth="142.0" text="TrA-Transport Airplane" />
+      <Label layoutX="14.0" layoutY="373.0" prefHeight="22.0" prefWidth="178.0" text="TrH-Transport Helicopter" />
+      <Label layoutX="13.0" layoutY="483.0" prefHeight="22.0" prefWidth="166.0" text="MHA-Military Hunter Airplane" />
+      <Label layoutX="14.0" layoutY="505.0" prefHeight="22.0" prefWidth="178.0" text="MBA- Military Bomber Airplane" />
+      <Label layoutX="13.0" layoutY="439.0" prefHeight="21.0" prefWidth="142.0" text="IPR-Ice Protection Rocket" />
+      <Label layoutX="13.0" layoutY="417.0" prefHeight="21.0" prefWidth="142.0" text="FrH-Fire Helicopter" />
+      <Label layoutX="14.0" layoutY="395.0" prefHeight="21.0" prefWidth="142.0" text="FrA- Fire Airplane" />
+      <Label layoutX="14.0" layoutY="527.0" prefHeight="21.0" prefWidth="142.0" text="MiR-Military Rocket" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="473.0" layoutY="31.0" prefHeight="21.0" prefWidth="142.0" text="No-flight zone:" textAlignment="CENTER" />
+      <Button fx:id="noFlightZoneActivateBtn" layoutX="436.0" layoutY="61.0" mnemonicParsing="false" onAction="#noFlightZoneActivateBtnClick" prefHeight="42.0" prefWidth="108.0" text="Activate" />
+      <Button fx:id="noFlightZoneDeactivateBtn" layoutX="561.0" layoutY="61.0" mnemonicParsing="false" onAction="#noFlightZoneDeactivateBtnClick" prefHeight="42.0" prefWidth="108.0" text="Deactivate" />
+      <Label fx:id="infoLabel" layoutX="85.0" layoutY="247.0" prefHeight="21.0" prefWidth="142.0" />
+      <Button fx:id="accidentsDisplayBtn" layoutX="589.0" layoutY="232.0" mnemonicParsing="false" onAction="#accidentsDisplayBtnClick" prefHeight="42.0" prefWidth="142.0" text="Display" />
+      <Button fx:id="enemyAircraftDisplayBtn" layoutX="589.0" layoutY="296.0" mnemonicParsing="false" onAction="#enemyAircraftDisplayBtnClick" prefHeight="42.0" prefWidth="142.0" text="Display" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="306.0" prefHeight="27.0" prefWidth="178.0" text="List of enemy aircraft:" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="402.0" layoutY="236.0" prefHeight="34.0" prefWidth="142.0" text="List of accidents:" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

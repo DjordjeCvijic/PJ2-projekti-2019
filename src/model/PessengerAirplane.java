@@ -9,8 +9,8 @@ public class PessengerAirplane extends Aircraft {
     private double maximumWeightOfLuggage;
 
 
-    public PessengerAirplane(String model, double height, Map characteristics, List persons, int numOfSeats,double max){
-        super(model,height,characteristics,persons,"PA");
+    public PessengerAirplane(String model, double height, Map characteristics, List persons, int numOfSeats,double max,Airspace a){
+        super(model,height,characteristics,persons,"PrA",a);
         numberOfSeats=numOfSeats;
         maximumWeightOfLuggage=max;
     }

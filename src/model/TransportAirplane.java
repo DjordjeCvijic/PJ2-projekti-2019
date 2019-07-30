@@ -6,8 +6,8 @@ import java.util.Map;
 public class TransportAirplane extends Aircraft{
 
     private double maximumWeightOfCargo;
-    public TransportAirplane(String model, double height, Map characteristics, List persons, double max){
-        super(model,height,characteristics,persons,"TA");
+    public TransportAirplane(String model, double height, Map characteristics, List persons, double max,Airspace a){
+        super(model,height,characteristics,persons,"TrA",a);
         maximumWeightOfCargo=max;
     }
     public double getMaximumWeightOfCargo() {

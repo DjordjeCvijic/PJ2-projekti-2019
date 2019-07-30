@@ -9,8 +9,8 @@ public class PessengerHelicopter extends Aircraft {
 
 
 
-    public PessengerHelicopter(String model, double height, Map characteristics, List persons, int numOfSeats){
-        super(model,height,characteristics,persons,"PH");
+    public PessengerHelicopter(String model, double height, Map characteristics, List persons, int numOfSeats,Airspace a){
+        super(model,height,characteristics,persons,"PrH",a);
         numberOfSeats=numOfSeats;
     }
 }
