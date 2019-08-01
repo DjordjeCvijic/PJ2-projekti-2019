@@ -24,6 +24,7 @@ public class Radar extends Thread {
         }
 
         f=new File("src" + File.separator + "resources" + File.separator + "map.txt");
+
     }
 
     public void run() {
@@ -35,7 +36,11 @@ public class Radar extends Thread {
 
                 try {
                     synchronized (f) {
+                        if(!Simulator.isStop() ){
+                            airspace.notify();
 
+
+                        }
 
 
                         BufferedWriter out = new BufferedWriter(new PrintWriter(f));
@@ -45,7 +50,7 @@ public class Radar extends Thread {
                         for (int i = 0; i < skyX; i++) {
                             for (int j = 0; j < skyY; j++) {
                                 out.write(airspace.getInfo(i, j));
-                                out.write("\r\n");
+                                out.write("\r\n");//ovjde nisam provjerio
                             }
                         }
 

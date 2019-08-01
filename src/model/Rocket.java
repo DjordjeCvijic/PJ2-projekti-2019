@@ -13,6 +13,7 @@ public class Rocket extends Thread {
     private int yPosition;
     private int flightIndex;
     private Airspace airspace;
+    private boolean canFliy=true;
 
     public Rocket(){};
 
@@ -62,23 +63,116 @@ public class Rocket extends Thread {
     }
     public void run(){
 
-        while(xPosition<airspace.getSkyX() &&yPosition<airspace.getSkyY()){
+        int c=0;
+        do {
 
-            try{
-                sleep(flightSpeed*1000);
+            if (canFliy) {
+                try {
+                    sleep(flightSpeed * 1000);
 
-            }catch (Exception e){
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                if (c == 0) {
+                    yPosition--;
+
+                } else if (c == 1) {
+                    xPosition--;
+
+
+                } else if (c == 2) {
+                    yPosition++;
+
+                } else if (c == 3) {
+                    xPosition++;
+
+                }
             }
-            airspace.flight(xPosition,yPosition,flightIndex);
+            else{
+                try {
+                    sleep(flightSpeed * 1000);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                flightIndex=modFlightIndex(flightIndex);//indesk za skretanje
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                if (c == 0) {
+                    yPosition--;
+
+                } else if (c == 1) {
+                    xPosition--;
 
 
+                } else if (c == 2) {
+                    yPosition++;
+
+                } else if (c == 3) {
+                    xPosition++;
+
+                }
+
+            }
+
+        }while(c!=-1);
+    }
+
+    private int modFlightIndex(int indeks) {
+        int min;
+        int newIndex=indeks;
+        if(indeks==0){
+            min=yPosition;
+            if (xPosition<min){
+                min=xPosition;
+                newIndex=1;
+            }
+            if(airspace.getSkyX()-1-xPosition<min){
+                newIndex=3;
+            }
 
 
+        }else if(indeks==1){
+            min=xPosition;
+            if(yPosition<min){
+                min=yPosition;
+                flightIndex=0;
+            }
+            if(airspace.getSkyY()-1-yPosition<min){
+                newIndex=2;
+            }
+
+        }else if(indeks==2){
+            min=airspace.getSkyY()-1-yPosition;
+            if(airspace.getSkyX()-1-xPosition<min){
+                min=airspace.getSkyX()-1-xPosition;
+                newIndex=3;
+            }
+            if(xPosition<min){
+                newIndex=1;
+            }
 
         }
+        else{
+            min=airspace.getSkyX()-1-xPosition;
+            if(airspace.getSkyY()-1-yPosition<min){
+                min=airspace.getSkyY()-1-yPosition;
+                newIndex=2;
+            }
+            if(yPosition<min)
+            {
+                newIndex=0;
+            }
+        }
+
+
+
+        return newIndex;
     }
 
 
-
+    public void setCanFliy(boolean canFliy) {
+        this.canFliy = canFliy;
+    }
 }

@@ -10,7 +10,7 @@ public class MilitaryBomberAirplane extends Aircraft{
         this.inland=inland;
     }
 
-    public boolean isInland(){
+    private boolean isInland(){
         return inland;
     }
 }

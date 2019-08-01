@@ -12,9 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -23,9 +25,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
-import java.util.Optional;
+
 import java.util.ResourceBundle;
 import model.Radar;
+import model.Simulator;
+
 
 
 
@@ -34,7 +38,9 @@ public class MainApplicationController extends Thread implements Initializable  
     @FXML
     private AnchorPane aPanel;
     @FXML
-    private Label infoLabel;
+    private Label infoLabel;//za pojavu strane letjelice
+    @FXML
+    private Label noFlightZoneLabel;
     private GridPane table;
 
     private File file;
@@ -68,6 +74,7 @@ public class MainApplicationController extends Thread implements Initializable  
             String []tmp=in.readLine().split("#");
             x=Integer.parseInt(tmp[0]);
             y=Integer.parseInt(tmp[1]);
+            //System.out.println("u kontoleru velicina table"+x+" "+y);
 
             Platform.runLater(new Runnable() {
                 @Override
@@ -94,11 +101,12 @@ public class MainApplicationController extends Thread implements Initializable  
                             BufferedReader in = new BufferedReader(new FileReader(file));
                             in.readLine();
                             String tmp[];
-                            map = new String[x][y];
+                            map = new String[x][y];//punjenjje pame provjeriti
                             for (int i = 0; i < x; i++) {
                                 for (int j = 0; j < y; j++) {
                                     tmp = in.readLine().split("#");
-                                    map[i][j] = tmp[1];
+                                    map[i][j] = tmp[1];//ispisati mapu
+
                                 }
                             }
                             Platform.runLater(new Runnable() {
@@ -121,45 +129,55 @@ public class MainApplicationController extends Thread implements Initializable  
 
     }
     public void print() {
-
+//ovo provjeriti
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
 
-                Text text = new Text(map[i][j]);
-                Node node = getNode(table, i, j);
+                TextField text1=new TextField(map[i][j]);
+                Node node = getNode(table, j, i);
                 table.getChildren().remove(node);
-                table.add(text, i, j);
-                GridPane.setValignment(text, VPos.CENTER);
-                GridPane.setHalignment(text, HPos.CENTER);
+                text1.setPrefWidth(29);
+                text1.setPrefHeight(29);
+                text1.setFont(new Font(10));
+                table.add(text1, j, i);//prvo colona pa red
+                //GridPane.setValignment(text, VPos.CENTER);
+                //GridPane.setHalignment(text, HPos.CENTER);
             }
         }
+
+
+
     }
 
 
 
 
-    public  GridPane setTable(String str,int rows,int columns) {
+    public  GridPane setTable(String str,int x,int y) {
          table = new GridPane();
 
-        for(int j=0;j<columns;j++) {
-            for (int i = 0; i < rows; i++) {
+        for(int i=0;i<x;i++) {
+            for (int j = 0; j < y; j++) {
 
 
                 Text text = new Text(str);
-                table.add(text, j, i);
-                GridPane.setValignment(text, VPos.CENTER);
+                TextField text1=new TextField(str);
+                text1.setPrefWidth(29);
+                text1.setPrefHeight(29);
+
+                table.add(text1, j, i);
+                GridPane.setValignment(text,VPos.CENTER);
                 GridPane.setHalignment(text, HPos.CENTER);
             }
         }
-        table.setAlignment(Pos.CENTER);
+        //table.setAlignment(Pos.CENTER);
 
-
-
-        table.setGridLinesVisible(true);
+        //table.setGridLinesVisible(true);
         //table.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         //  table.setMaxSize(4,4);
         table.setLayoutX(20);
         table.setLayoutY(20);
+        //table.setPrefSize(505, 505);
+       // table.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         return table;
 
     }
@@ -167,11 +185,14 @@ public class MainApplicationController extends Thread implements Initializable  
     public void noFlightZoneActivateBtnClick(ActionEvent actionEvent) {
 
         System.out.println("STOP");
-        infoLabel.setText("strana letjelica");
+        noFlightZoneLabel.setText("No-Flight Zone");
+        Simulator.noFlightZoneActivate();
     }
 
     public void noFlightZoneDeactivateBtnClick(ActionEvent actionEvent) {
         System.out.println("STart");
+        noFlightZoneLabel.setText("");
+        Simulator.noFlightZoneDeactivate();
     }
 
     public void accidentsDisplayBtnClick(ActionEvent actionEvent) {
