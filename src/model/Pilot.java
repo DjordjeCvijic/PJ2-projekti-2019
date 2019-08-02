@@ -12,9 +12,9 @@ public class Pilot extends Person {
         this.license = license;
     }
 
-    public Pilot(String n, String s, String l){
-        super(n,s);
-        license=l;
+    public Pilot(String n, String s, String l) {
+        super(n, s);
+        license = l;
 
     }
 

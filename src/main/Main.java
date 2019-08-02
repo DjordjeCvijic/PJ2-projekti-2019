@@ -5,15 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.File;
 
 public class Main extends Application {
     public static Stage primaryStage1;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        primaryStage1=primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource(".."+File.separator+"view"+File.separator+"start.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage1 = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource(".." + File.separator + "view" + File.separator + "start.fxml"));
         primaryStage.setTitle("Welcome");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

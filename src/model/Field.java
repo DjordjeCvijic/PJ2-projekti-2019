@@ -5,13 +5,13 @@ public class Field {
     private int id;
     private int[] idsOfAircraftInAccidents;
     private int numberOfAircraftInAccidents;
-    private boolean secondAircraft=false;
+    private boolean secondAircraft = false;
     private int secondId;
     private String secondMar;
 
-    public Field(String mark,int id) {
-        aircraftMark=mark;
-        this.id=id;
+    public Field(String mark, int id) {
+        aircraftMark = mark;
+        this.id = id;
     }
 
     public String getAircraftMark() {

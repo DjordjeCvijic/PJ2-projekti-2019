@@ -4,10 +4,9 @@ public class Traveler extends Person {
 
     private int numOfPassport;
 
-    public Traveler(String n,String s,int num)
-    {
-        super(n,s);
-        numOfPassport=num;
+    public Traveler(String n, String s, int num) {
+        super(n, s);
+        numOfPassport = num;
     }
 
     public int getNumOfPassport() {

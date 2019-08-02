@@ -1,6 +1,8 @@
 package model;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Radar extends Thread {
 
@@ -9,6 +11,8 @@ public class Radar extends Thread {
     private int skyX;
     private int skyY;
     public static File f;
+    private File fileForEnemis;
+    private List idOfEnemis;
 
     public Radar(Airspace a) {
         airspace = a;
@@ -23,11 +27,14 @@ public class Radar extends Thread {
             e.printStackTrace();
         }
 
-        f=new File("src" + File.separator + "resources" + File.separator + "map.txt");
+        f = new File("src" + File.separator + "resources" + File.separator + "map.txt");
+
+        idOfEnemis=new ArrayList<Integer>();
 
     }
 
     public void run() {
+
 
 
         while (true) {
@@ -36,32 +43,59 @@ public class Radar extends Thread {
 
                 try {
                     synchronized (f) {
-                        if(!Simulator.isStop() ){
+                        if (!Simulator.isStop() && !airspace.isIsEnemy()) {
                             airspace.notify();
+                            System.out.println("notufy u radatu poslije zabrane leta");
 
 
                         }
 
 
                         BufferedWriter out = new BufferedWriter(new PrintWriter(f));
-                        out.write(skyX+"#"+skyY);
+                        out.write(skyX + "#" + skyY);
                         out.write("\r\n");
+                        int numOfMili = 0;
 
                         for (int i = 0; i < skyX; i++) {
                             for (int j = 0; j < skyY; j++) {
                                 out.write(airspace.getInfo(i, j));
-                                out.write("\r\n");//ovjde nisam provjerio
+                                out.write("\r\n");
+                                //if(airspace.getMarkInPosition(i,j).equals("MBA") ||(airspace.getMarkInPosition(i,j).equals("MHA" )
+                                //|| (airspace.getMarkInPosition(i,j).equals("MiR")))) numOfMili++;
+                                if (Simulator.isThisEnemy(airspace.getIdInThisPosition(i, j)) && !idOfEnemis.contains(airspace.getIdInThisPosition(i, j))) {
+                                    idOfEnemis.add(airspace.getIdInThisPosition(i, j));
+                                    System.out.println("radar prepoznao: "+airspace.getIdInThisPosition(i, j));
+                                    try{
+                                        BufferedWriter out1=new BufferedWriter(new PrintWriter(
+                                                "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis())+".txt"));
+                                        out1.write(airspace.getInfo(i, j));
+                                        out1.close();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+
+
+
+                                }
+
+
                             }
                         }
 
 
                         out.close();
 
+                        if (airspace.isIsEnemy() && airspace.getEnemiesInSky() == 0) {
+                            airspace.setIsEnemy(false);
+                            Simulator.noFlightZoneDeactivate();
+                            System.out.println("radi");
+                        }
+                        System.out.println(airspace.getEnemiesInSky());
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
 
 
             }

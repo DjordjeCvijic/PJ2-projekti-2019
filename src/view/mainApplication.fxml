@@ -21,7 +21,6 @@
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="473.0" layoutY="31.0" prefHeight="21.0" prefWidth="142.0" text="No-flight zone:" textAlignment="CENTER" />
       <Button fx:id="noFlightZoneActivateBtn" layoutX="436.0" layoutY="61.0" mnemonicParsing="false" onAction="#noFlightZoneActivateBtnClick" prefHeight="42.0" prefWidth="108.0" text="Activate" />
       <Button fx:id="noFlightZoneDeactivateBtn" layoutX="561.0" layoutY="61.0" mnemonicParsing="false" onAction="#noFlightZoneDeactivateBtnClick" prefHeight="42.0" prefWidth="108.0" text="Deactivate" />
-      <Label fx:id="infoLabel" layoutX="85.0" layoutY="247.0" prefHeight="21.0" prefWidth="142.0" />
       <Button fx:id="accidentsDisplayBtn" layoutX="589.0" layoutY="232.0" mnemonicParsing="false" onAction="#accidentsDisplayBtnClick" prefHeight="42.0" prefWidth="142.0" text="Display" />
       <Button fx:id="enemyAircraftDisplayBtn" layoutX="589.0" layoutY="296.0" mnemonicParsing="false" onAction="#enemyAircraftDisplayBtnClick" prefHeight="42.0" prefWidth="142.0" text="Display" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="306.0" prefHeight="27.0" prefWidth="178.0" text="List of enemy aircraft:" textAlignment="CENTER">
@@ -35,5 +34,6 @@
          </font>
       </Label>
       <Label fx:id="noFlightZoneLabel" alignment="CENTER" layoutX="436.0" layoutY="136.0" prefHeight="22.0" prefWidth="234.0" textAlignment="CENTER" />
+      <Label fx:id="infoLabel" layoutX="347.0" layoutY="406.0" prefHeight="21.0" prefWidth="142.0" />
    </children>
 </AnchorPane>

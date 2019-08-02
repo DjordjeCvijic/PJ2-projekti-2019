@@ -56,30 +56,34 @@ public class Simulator extends Thread {
 
                 if (stop) {
                     try {
+                        System.out.println("wait u simulatoru");
                         airspace.wait();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
 
 
-                if (isFileUpdated(f) || numberOfInlandAircrafts > 0 || numberOfEnemiesAircrafts > 0) {
+                if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(f));
                         String s = in.readLine();
                         String[] tmp = s.split("#");
                         numberOfEnemiesAircrafts = Integer.parseInt(tmp[0]);
                         numberOfInlandAircrafts = Integer.parseInt(tmp[1]);
+                        int tmp1 = numberOfEnemiesAircrafts;
+                        //int tmp2=numberOfInlandAircrafts;
 
                         if (numberOfInlandAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
-                            System.out.println(nextAircraft);
+
                             addMillitaryAircraft(nextAircraft, true);
                             numberOfInlandAircrafts--;
 
 
                         } else if (numberOfEnemiesAircrafts > 0) {
-                            String nextAircraft = aircraftToAdd[random.nextInt(3)] + 8;
+                            String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
                             addMillitaryAircraft(nextAircraft, false);
                             numberOfEnemiesAircrafts--;
 
@@ -95,7 +99,8 @@ public class Simulator extends Thread {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else {
+                } else //if(airspace.getEnemiesInSky()==-1)
+                {
 
 
                     String nextAircraft = aircraftToAdd[random.nextInt(8)];
@@ -213,9 +218,14 @@ public class Simulator extends Thread {
             newRocket.start();
         }
 
+
         if (!inland) {
-            
+            airspace.incramentEnemiesInSky();
+            airspace.setIsEnemy(true);
+            noFlightZoneActivate();
+
         }
+
 
     }
 
@@ -241,13 +251,16 @@ public class Simulator extends Thread {
         Set<Integer> s1 = rockets.keySet();
         for (Integer i : s) {
             Aircraft a = (Aircraft) aircrafts.get(i);
-            a.setCanFly(false);
+            if (!(a.getMark().equals("MHA") || a.getMark().equals("MBA"))) {
+                a.setCanFly(false);
+            }
 
 
         }
         for (Integer i : s1) {
             Rocket a = (Rocket) rockets.get(i);
-            a.setCanFliy(false);
+            if (!a.getMark().equals("MiR"))
+                a.setCanFliy(false);
 
         }
 
@@ -267,6 +280,28 @@ public class Simulator extends Thread {
 
     public static boolean isStop() {
         return stop;
+    }
+
+    public static boolean isThisEnemy(int id) {
+
+        if(id==0){
+            return false;
+        }
+
+        boolean tmp;
+        if (id < 500) {
+
+            Aircraft a = (Aircraft) aircrafts.get(id);
+            tmp=a.isEnemy();
+
+        }else{
+            Rocket r=(Rocket)rockets.get(id);
+            tmp=r.isEnemy();
+
+        }
+
+        return tmp;
+
     }
 }
 

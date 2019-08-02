@@ -19,6 +19,7 @@ public class Aircraft extends Thread {
     private int xPosition;
     private int yPosition;
     private boolean canFly = true;
+    private boolean enemy=false;
 
     private Airspace airspace;
 
@@ -44,7 +45,10 @@ public class Aircraft extends Thread {
 
 
     }
-    private boolean isInland(){return false;}
+
+    private boolean isInland() {
+        return false;
+    }
 
     public String getMark() {
         return mark;
@@ -86,10 +90,11 @@ public class Aircraft extends Thread {
 
     public void run() {
 
+
         int c = 0;
         do {
             //if ((mark.equals("MHA") || mark.equals("MBM") || mark.equals("MiR")) || (canFly && airspace.getEnemiesInSky() == 0)) {
-                if (canFly) {
+            if (canFly) {
                 try {
                     sleep(flightSpeed * 1000);
 
@@ -145,6 +150,9 @@ public class Aircraft extends Thread {
             //System.out.println("kraj rana letjelice pozzicije i ideks"+xPosition+" "+yPosition+" "+c);
 
         } while (c != -1);
+        if(enemy){
+            Airspace.decramentEnemiesInSky();
+        }
 
 
     }
@@ -200,5 +208,13 @@ public class Aircraft extends Thread {
 
     public void setCanFly(boolean canFly) {
         this.canFly = canFly;
+    }
+
+    public boolean isEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(boolean enemy) {
+        this.enemy = enemy;
     }
 }

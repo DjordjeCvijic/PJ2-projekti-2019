@@ -1,42 +1,37 @@
 package model;
 
 
+public class Airspace extends Thread {
 
-public class Airspace extends Thread{
-
-   private Field [][] fields;
-    private int numberOfAircrafts=0;
+    private Field[][] fields;
+    private int numberOfAircrafts = 0;
     private int skyX;
     private int skyY;
     public static boolean noFly;
-    private int enemiesInSky=0;
-    public Airspace(){}
+    private static int enemiesInSky = 0;
+    private static int inLandInSky=0;
+    public static boolean isEnemy=false;
 
-    public void setAirspace(int i,int j) {
-        skyX=i;
-        skyY=j;
+
+    public Airspace() {
+    }
+
+    public void setAirspace(int i, int j) {
+        skyX = i;
+        skyY = j;
         //System.out.println("set airspaca,"+skyX+" "+skyY);//mmmmmmmmmmm
 
-        fields=new Field[i][j];
-        for(int a=0;a<skyX;a++){
-            for(int b=0;b<skyY;b++){
-                fields[a][b]=new Field("   ",0);
+        fields = new Field[i][j];
+        for (int a = 0; a < skyX; a++) {
+            for (int b = 0; b < skyY; b++) {
+                fields[a][b] = new Field("   ", 0);
             }
         }
 
     }
 
-    public synchronized void  addObjectOnSky(String mark,int x,int y,int id){//moze se desiti sudar prilikom ulaza.Treba obraditi taj slucaj
-        /*if(Simulator.isStop()){
-            try{
-                System.out.println("u addObjectOn sky stop");
-                wait();
+    public synchronized void addObjectOnSky(String mark, int x, int y, int id) {//moze se desiti sudar prilikom ulaza.Treba obraditi taj slucaj
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }*/
         fields[x][y].setAircraftMark(mark);
         fields[x][y].setId(id);
         numberOfAircrafts++;
@@ -52,21 +47,13 @@ public class Airspace extends Thread{
         }
         this.notify();
     }*/
-    private  void provjera() {
-        System.out.println("provjera");
-
-        while (Simulator.isStop()) {
-            System.out.println("a");
-
-        }
-        notify();
-    }
 
 
-    public void print(int x,int y){
-        for(int i=0;i<x;i++){
-            for(int j=0;j<y;j++){
-                System.out.println(fields[i][j].getAircraftMark()+ " "+ i + " "+j);
+
+    public void print(int x, int y) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                System.out.println(fields[i][j].getAircraftMark() + " " + i + " " + j);
             }
         }
     }
@@ -81,88 +68,82 @@ public class Airspace extends Thread{
 
     public String getInfo(int i, int j) {
 
-        return(fields[i][j].getId()+"#"+fields[i][j].getAircraftMark()+"#"+i+"#"+j);
+        return (fields[i][j].getId() + "#" + fields[i][j].getAircraftMark() + "#" + i + "#" + j);
     }
 
-    public synchronized int flight(int xPosition, int yPosition, int flightIndex,String mark,int id) {
+    public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id) {
 
         //System.out.println("u letu pozocije prije pomicaja i ideks"+ xPosition+" "+yPosition+" "+flightIndex);
-       int f=flightIndex;
-        if(flightIndex==0){
+        int f = flightIndex;
+        if (flightIndex == 0) {
             //System.out.println(flightIndex);
-            if(yPosition==0){
-                f=-1;
+            if (yPosition == 0) {
+                f = -1;
                 numberOfAircrafts--;
 
-            }
-            else{
-                if(!fields[xPosition][yPosition-1].getAircraftMark().equals("   ")){
-                    fields[xPosition][yPosition-1].setSecondAircraft(true);
-                    fields[xPosition][yPosition-1].setSecondMar(fields[xPosition][yPosition-1].getAircraftMark());
-                    fields[xPosition][yPosition-1].setSecondId(fields[xPosition][yPosition-1].getId());
+            } else {
+                if (!fields[xPosition][yPosition - 1].getAircraftMark().equals("   ")) {
+                    fields[xPosition][yPosition - 1].setSecondAircraft(true);
+                    fields[xPosition][yPosition - 1].setSecondMar(fields[xPosition][yPosition - 1].getAircraftMark());
+                    fields[xPosition][yPosition - 1].setSecondId(fields[xPosition][yPosition - 1].getId());
                 }
-                fields[xPosition][yPosition-1].setAircraftMark(mark);
-                fields[xPosition][yPosition-1].setId(id);
+                fields[xPosition][yPosition - 1].setAircraftMark(mark);
+                fields[xPosition][yPosition - 1].setId(id);
 
             }
-        }else if(flightIndex==1){
-           // System.out.println(flightIndex);
-            if(xPosition==0){
-                f=-1;
+        } else if (flightIndex == 1) {
+            // System.out.println(flightIndex);
+            if (xPosition == 0) {
+                f = -1;
                 numberOfAircrafts--;
-            }
-            else{
-                if(!fields[xPosition-1][yPosition].getAircraftMark().equals("   ")){
-                    fields[xPosition-1][yPosition].setSecondAircraft(true);
-                    fields[xPosition-1][yPosition].setSecondMar(fields[xPosition-1][yPosition].getAircraftMark());
-                    fields[xPosition-1][yPosition].setSecondId(fields[xPosition-1][yPosition].getId());
+            } else {
+                if (!fields[xPosition - 1][yPosition].getAircraftMark().equals("   ")) {
+                    fields[xPosition - 1][yPosition].setSecondAircraft(true);
+                    fields[xPosition - 1][yPosition].setSecondMar(fields[xPosition - 1][yPosition].getAircraftMark());
+                    fields[xPosition - 1][yPosition].setSecondId(fields[xPosition - 1][yPosition].getId());
                 }
-                fields[xPosition-1][yPosition].setAircraftMark(mark);
-                fields[xPosition-1][yPosition].setId(id);
+                fields[xPosition - 1][yPosition].setAircraftMark(mark);
+                fields[xPosition - 1][yPosition].setId(id);
 
             }
-        }else if(flightIndex==2){
+        } else if (flightIndex == 2) {
             //System.out.println(flightIndex);
-            if(yPosition==skyY-1){
-                f=-1;
+            if (yPosition == skyY - 1) {
+                f = -1;
                 numberOfAircrafts--;
-            }
-            else{
-                if(!fields[xPosition][yPosition+1].getAircraftMark().equals("   ")){
-                    fields[xPosition][yPosition+1].setSecondAircraft(true);
-                    fields[xPosition][yPosition+1].setSecondMar(fields[xPosition][yPosition+1].getAircraftMark());
-                    fields[xPosition][yPosition+1].setSecondId(fields[xPosition][yPosition+1].getId());
+            } else {
+                if (!fields[xPosition][yPosition + 1].getAircraftMark().equals("   ")) {
+                    fields[xPosition][yPosition + 1].setSecondAircraft(true);
+                    fields[xPosition][yPosition + 1].setSecondMar(fields[xPosition][yPosition + 1].getAircraftMark());
+                    fields[xPosition][yPosition + 1].setSecondId(fields[xPosition][yPosition + 1].getId());
                 }
-                fields[xPosition][yPosition+1].setAircraftMark(mark);
-                fields[xPosition][yPosition+1].setId(id);
+                fields[xPosition][yPosition + 1].setAircraftMark(mark);
+                fields[xPosition][yPosition + 1].setId(id);
             }
-        }else{
+        } else {
             //System.out.println(flightIndex);
-            if(xPosition==skyX-1){
-                f=-1;
+            if (xPosition == skyX - 1) {
+                f = -1;
                 numberOfAircrafts--;
-            }
-            else{
-                if(!fields[xPosition+1][yPosition].getAircraftMark().equals("   ")){
-                    fields[xPosition+1][yPosition].setSecondAircraft(true);
-                    fields[xPosition+1][yPosition].setSecondMar(fields[xPosition+1][yPosition].getAircraftMark());
-                    fields[xPosition+1][yPosition].setSecondId(fields[xPosition+1][yPosition].getId());
+            } else {
+                if (!fields[xPosition + 1][yPosition].getAircraftMark().equals("   ")) {
+                    fields[xPosition + 1][yPosition].setSecondAircraft(true);
+                    fields[xPosition + 1][yPosition].setSecondMar(fields[xPosition + 1][yPosition].getAircraftMark());
+                    fields[xPosition + 1][yPosition].setSecondId(fields[xPosition + 1][yPosition].getId());
                 }
-                fields[xPosition+1][yPosition].setAircraftMark(mark);
-                fields[xPosition+1][yPosition].setId(id);
+                fields[xPosition + 1][yPosition].setAircraftMark(mark);
+                fields[xPosition + 1][yPosition].setId(id);
             }
         }
-        if(fields[xPosition][yPosition].isSecondAircraft()){
-            if(fields[xPosition][yPosition].getAircraftMark().equals(mark))
-            {
+        if (fields[xPosition][yPosition].isSecondAircraft()) {
+            if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
                 fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
                 fields[xPosition][yPosition].setSecondId(fields[xPosition][yPosition].getSecondId());
                 fields[xPosition][yPosition].setSecondAircraft(false);
                 fields[xPosition][yPosition].setSecondId(0);
                 fields[xPosition][yPosition].setSecondMar("   ");
 
-            }
-            else{
+            } else {
                 fields[xPosition][yPosition].setSecondAircraft(false);
                 fields[xPosition][yPosition].setSecondId(0);
                 fields[xPosition][yPosition].setSecondMar("   ");
@@ -170,8 +151,7 @@ public class Airspace extends Thread{
             }
 
 
-
-        }else {
+        } else {
             fields[xPosition][yPosition].setId(0);
             fields[xPosition][yPosition].setAircraftMark("   ");
         }
@@ -186,16 +166,48 @@ public class Airspace extends Thread{
 
     public static void setNoFly(boolean noFly) {
         Airspace.noFly = noFly;
-        if(!noFly){
+        if (!noFly) {
 
         }
     }
 
     public int getEnemiesInSky() {
+
         return enemiesInSky;
     }
 
-    public void setEnemiesInSky(int enemiesInSky) {
-        this.enemiesInSky += enemiesInSky;
+    public static void incramentEnemiesInSky() {
+
+       /*if(enemiesInSky==-1)
+           enemiesInSky=1;
+       else enemiesInSky++;*/
+       enemiesInSky++;
     }
+    public static void decramentEnemiesInSky(){
+        /*if(enemiesInSky==1)
+           enemiesInSky=-1;
+        else enemiesInSky--;*/
+        enemiesInSky--;
+
+    }
+    public String getMarkInPosition(int x,int y){
+        return fields[x][y].getAircraftMark();
+    }
+
+
+    public static boolean isIsEnemy() {
+        return isEnemy;
+    }
+
+    public static void setIsEnemy(boolean isEnemy) {
+        Airspace.isEnemy = isEnemy;
+    }
+
+    public int getIdInThisPosition(int i, int j) {
+        return fields[i][j].getId();
+    }
+    public static int getIdInThisPositionStatic(int i,int j){
+        return getIdInThisPosition(i,j);
+    }
+
 }
