@@ -8,7 +8,7 @@ public class Simulator extends Thread {
     private int skyX;
     private int skyY;
     private String[] aircraftToAdd = {"PrA", "PrH", "TrA", "TrH", "FrA", "FrH", "IPR", "Drn", "MHA", "MBA", "MiR"};
-    private static Map aircrafts;
+    public static Map aircrafts;
     private static Map rockets;
     private final Airspace airspace;
     private long timeStamp;
@@ -221,7 +221,7 @@ public class Simulator extends Thread {
 
         if (!inland) {
             airspace.incramentEnemiesInSky();
-            airspace.setIsEnemy(true);
+            airspace.setIsEnemyInSky(true);
             noFlightZoneActivate();
 
         }
@@ -289,7 +289,7 @@ public class Simulator extends Thread {
         }
 
         boolean tmp;
-        if (id < 500) {
+        if (id < 600) {
 
             Aircraft a = (Aircraft) aircrafts.get(id);
             tmp=a.isEnemy();

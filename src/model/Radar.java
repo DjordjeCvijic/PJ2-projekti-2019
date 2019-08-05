@@ -12,7 +12,7 @@ public class Radar extends Thread {
     private int skyY;
     public static File f;
     private File fileForEnemis;
-    private List idOfEnemis;
+    public static List idOfEnemis;
 
     public Radar(Airspace a) {
         airspace = a;
@@ -43,7 +43,7 @@ public class Radar extends Thread {
 
                 try {
                     synchronized (f) {
-                        if (!Simulator.isStop() && !airspace.isIsEnemy()) {
+                        if (!Simulator.isStop() && !airspace.isIsEnemyInSky()) {
                             airspace.notify();
                             System.out.println("notufy u radatu poslije zabrane leta");
 
@@ -60,11 +60,8 @@ public class Radar extends Thread {
                             for (int j = 0; j < skyY; j++) {
                                 out.write(airspace.getInfo(i, j));
                                 out.write("\r\n");
-                                //if(airspace.getMarkInPosition(i,j).equals("MBA") ||(airspace.getMarkInPosition(i,j).equals("MHA" )
-                                //|| (airspace.getMarkInPosition(i,j).equals("MiR")))) numOfMili++;
                                 if (Simulator.isThisEnemy(airspace.getIdInThisPosition(i, j)) && !idOfEnemis.contains(airspace.getIdInThisPosition(i, j))) {
                                     idOfEnemis.add(airspace.getIdInThisPosition(i, j));
-                                    System.out.println("radar prepoznao: "+airspace.getIdInThisPosition(i, j));
                                     try{
                                         BufferedWriter out1=new BufferedWriter(new PrintWriter(
                                                 "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis())+".txt"));
@@ -85,8 +82,8 @@ public class Radar extends Thread {
 
                         out.close();
 
-                        if (airspace.isIsEnemy() && airspace.getEnemiesInSky() == 0) {
-                            airspace.setIsEnemy(false);
+                        if (airspace.isIsEnemyInSky() && airspace.getEnemiesInSky() == 0) {
+                            airspace.setIsEnemyInSky(false);
                             Simulator.noFlightZoneDeactivate();
                             System.out.println("radi");
                         }

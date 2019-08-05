@@ -28,7 +28,9 @@ public class Aircraft extends Thread {
     public Aircraft() {
     }
 
-    ;
+    public double getHeightOfTheFlight() {
+        return heightOfTheFlight;
+    }
 
     public Aircraft(String model, double height, Map characteristics, List persons, String mark, Airspace a) {
         this.model = model;
@@ -103,7 +105,7 @@ public class Aircraft extends Thread {
                 }
                 // System.out.println("u ranu letjelice pozicije"+xPosition+" "+yPosition);
 
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
                 //System.out.println("u ranu letjelice pozicije i ideks"+xPosition+" "+yPosition+" "+c);
                 if (c == 0) {
                     yPosition--;
@@ -123,14 +125,14 @@ public class Aircraft extends Thread {
 
             } else {
                 try {
-                    sleep(flightSpeed * 1000);
+                    sleep(flightSpeed * 1000);//mozda ne treba
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 flightIndex = modFlightIndex(flightIndex);//indesk za skretanje
                 // System.out.println(flightIndex);
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
                 if (c == 0) {
                     yPosition--;
 

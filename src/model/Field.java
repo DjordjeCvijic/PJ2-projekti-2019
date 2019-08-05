@@ -1,17 +1,21 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Field {
     private String aircraftMark;
     private int id;
-    private int[] idsOfAircraftInAccidents;
-    private int numberOfAircraftInAccidents;
+    private Double heightOfTheFlight;
+
     private boolean secondAircraft = false;
     private int secondId;
     private String secondMar;
+    private Double secondHeightOfTheFlight;
 
     public Field(String mark, int id) {
         aircraftMark = mark;
         this.id = id;
+
     }
 
     public String getAircraftMark() {
@@ -54,4 +58,22 @@ public class Field {
     public void setSecondId(int secondId) {
         this.secondId = secondId;
     }
+
+    public Double getSecondHeightOfTheFlight() {
+        return secondHeightOfTheFlight;
+    }
+
+    public void setSecondHeightOfTheFlight(Double secondHeightOfTheFlight) {
+        this.secondHeightOfTheFlight = secondHeightOfTheFlight;
+    }
+
+    public Double getHeightOfTheFlight() {
+        return heightOfTheFlight;
+    }
+
+    public void setHeightOfTheFlight(Double heightOfTheFlight) {
+        this.heightOfTheFlight = heightOfTheFlight;
+    }
+
+
 }

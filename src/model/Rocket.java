@@ -79,7 +79,7 @@ public class Rocket extends Thread {
                     e.printStackTrace();
                 }
 
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
                 if (c == 0) {
                     yPosition--;
 
@@ -102,7 +102,7 @@ public class Rocket extends Thread {
                     e.printStackTrace();
                 }
                 flightIndex = modFlightIndex(flightIndex);//indesk za skretanje
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
                 if (c == 0) {
                     yPosition--;
 
@@ -186,5 +186,9 @@ public class Rocket extends Thread {
 
     public void setEnemy(boolean enemy) {
         this.enemy = enemy;
+    }
+
+    public double getHeightOfTheFlight() {
+        return heightOfTheFlight;
     }
 }

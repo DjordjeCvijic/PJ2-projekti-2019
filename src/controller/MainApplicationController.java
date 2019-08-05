@@ -101,7 +101,7 @@ public class MainApplicationController extends Thread implements Initializable {
         }
         timeStamp = file.lastModified();
         while (true) {
-            if (!Airspace.isIsEnemy()) {
+            if (!Airspace.isIsEnemyInSky()) {
                 infoText = " ";
             }
             Platform.runLater(new Runnable() {

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.EnemyAircraftStageController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<TableView fx:id="tableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EnemyAircraftStageController">
+   <columns>
+      <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
+      <TableColumn fx:id="markColumn" prefWidth="75.0" text="MARK" />
+      <TableColumn prefWidth="75.0" text="X" fx:id="xColumn" />
+      <TableColumn fx:id="yColumn" prefWidth="75.0" text="Y" />
+      <TableColumn fx:id="timeColumn" prefWidth="224.39996337890625" text="TIME" />
+   </columns>
+</TableView>
