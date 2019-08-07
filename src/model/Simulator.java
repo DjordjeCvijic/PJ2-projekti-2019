@@ -9,7 +9,7 @@ public class Simulator extends Thread {
     private int skyY;
     private String[] aircraftToAdd = {"PrA", "PrH", "TrA", "TrH", "FrA", "FrH", "IPR", "Drn", "MHA", "MBA", "MiR"};
     public static Map aircrafts;
-    private static Map rockets;
+    public static Map rockets;
     private final Airspace airspace;
     private long timeStamp;
     private Random random = new Random();
@@ -51,7 +51,7 @@ public class Simulator extends Thread {
 
 
         this.timeStamp = f.lastModified();
-        while (true) {
+        //while (true) {
             synchronized (airspace) {
 
                 if (stop) {
@@ -65,7 +65,28 @@ public class Simulator extends Thread {
                 }
 
 
-                if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
+                //samo za testiranje sudara:
+                newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
+                newAircraft.setEntrance1(skyX, skyY);
+
+                aircrafts.put(newAircraft.getIdOfAircraft(), newAircraft);
+                airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+                newAircraft.start();
+
+                Aircraft newAircraft1 = new PessengerAirplane(Integer.toString(random.nextInt(1000)), 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
+                newAircraft1.setEntrance2(skyX, skyY);
+
+                aircrafts.put(newAircraft1.getIdOfAircraft(), newAircraft1);
+                airspace.addObjectOnSky(newAircraft1.getMark(), newAircraft1.getXPosition(), newAircraft1.getYPosition(), newAircraft1.getIdOfAircraft());
+                newAircraft1.start();
+
+
+
+
+
+                /*if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(f));
                         String s = in.readLine();
@@ -177,17 +198,18 @@ public class Simulator extends Thread {
                     }
 
 
-                }
+                }*/
             }
 
+
             //airspace.print(skyX,skyY);
-            try {
+            /*try {
 
                 sleep(timeInterval * 1000);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
+            }*/
+        //}
 
 
     }
@@ -283,6 +305,7 @@ public class Simulator extends Thread {
     }
 
     public static boolean isThisEnemy(int id) {
+
 
         if(id==0){
             return false;

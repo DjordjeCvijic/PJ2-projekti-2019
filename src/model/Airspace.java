@@ -2,6 +2,7 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Airspace extends Thread {
 
@@ -13,22 +14,51 @@ public class Airspace extends Thread {
     private static int enemiesInSky = 0;
     private static int inLandInSky = 0;
     public static boolean isEnemyInSky = false;
-    private ArrayList idsOfAircraftInAccidents;
+    private ArrayList<Integer> idsOfAircraftInAccidents;
+    private ArrayList<Integer> idsOfAircraftToEleminate;
     private int numberOfAircraftInAccidents;
 
+    public Integer[] getIdsOfAircraftToEleminate() {
+        Integer []arr=new Integer[idsOfAircraftToEleminate.size()];
+        arr=idsOfAircraftToEleminate.toArray(arr);
+        return arr;
+    }
+
+    public int getNumberOfAircraftInAccidents() {
+        return numberOfAircraftInAccidents;
+    }
 
     public Airspace() {
+        idsOfAircraftToEleminate=new ArrayList<Integer>();
         idsOfAircraftInAccidents = new ArrayList<Integer>();
         numberOfAircraftInAccidents = 0;
     }
 
-    public void addIdsOfAircraftInAccidents(int i) {
+    public synchronized void addIdsOfAircraftInAccidents(int i) {
         idsOfAircraftInAccidents.add(i);
+        idsOfAircraftToEleminate.add(i);
         numberOfAircraftInAccidents++;
+
     }
 
     public void remuveIdsOfAircraftInAccidents(int i) {
-        idsOfAircraftInAccidents.remove(i);
+        Iterator itr = idsOfAircraftInAccidents.iterator();
+        while (itr.hasNext())
+        {
+            int x = (Integer)itr.next();
+            if (x == i)
+                itr.remove();
+        }
+
+    }
+    public void remuveIdsOfAircraftToEleminate(int i) {
+        Iterator itr = idsOfAircraftToEleminate.iterator();
+        while (itr.hasNext())
+        {
+            int x = (Integer)itr.next();
+            if (x == i)
+                itr.remove();
+        }
         numberOfAircraftInAccidents--;
     }
 
@@ -55,13 +85,7 @@ public class Airspace extends Thread {
     }
 
 
-    public void print(int x, int y) {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                System.out.println(fields[i][j].getAircraftMark() + " " + i + " " + j);
-            }
-        }
-    }
+
 
     public int getSkyX() {
         return skyX;
@@ -77,7 +101,9 @@ public class Airspace extends Thread {
     }
 
     public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
-        if(idsOfAircraftInAccidents.contains(id))return -1;
+
+        if (idsOfAircraftInAccidents.contains(id)) return -1;
+
 
         //System.out.println("u letu pozocije prije pomicaja i ideks"+ xPosition+" "+yPosition+" "+flightIndex);
         int f = flightIndex;
@@ -180,12 +206,12 @@ public class Airspace extends Thread {
         return f;
     }
 
-    private boolean crash(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
+    private synchronized boolean crash(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
 
         if (flightIndex == 0) {
             if (height == fields[xPosition][yPosition - 1].getHeightOfTheFlight()) {
-                idsOfAircraftInAccidents.add(id);
-                idsOfAircraftInAccidents.add(fields[xPosition][yPosition - 1].getId());
+                addIdsOfAircraftInAccidents(id);
+                addIdsOfAircraftInAccidents(fields[xPosition][yPosition - 1].getId());
                 fields[xPosition][yPosition].setId(0);
                 fields[xPosition][yPosition].setAircraftMark("   ");
                 fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
@@ -196,13 +222,46 @@ public class Airspace extends Thread {
             }
             return false;
         } else if (flightIndex == 1) {
+            if (height == fields[xPosition - 1][yPosition].getHeightOfTheFlight()) {
+                addIdsOfAircraftInAccidents(id);
+                addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                fields[xPosition][yPosition].setId(0);
+                fields[xPosition][yPosition].setAircraftMark("   ");
+                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition - 1][yPosition].setId(0);
+                fields[xPosition - 1][yPosition].setAircraftMark("   ");
+                fields[xPosition - 1][yPosition].setHeightOfTheFlight(0.0);
+                return true;
 
-
-            ///ovdje stao:radar pregledava idekse sudara i na osnovu njih pravi objekat,radar uklanja idekse iz niza
-            //prilikom ulaska u fly letjelica gleda se ima li njegovog ideksa da odmah izadje
+            }
+            return false;
+        } else if (flightIndex == 2) {
+            if (height == fields[xPosition][yPosition + 1].getHeightOfTheFlight()) {
+                addIdsOfAircraftInAccidents(id);
+                addIdsOfAircraftInAccidents(fields[xPosition][yPosition + 1].getId());
+                fields[xPosition][yPosition].setId(0);
+                fields[xPosition][yPosition].setAircraftMark("   ");
+                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition + 1].setId(0);
+                fields[xPosition][yPosition + 1].setAircraftMark("   ");
+                fields[xPosition][yPosition + 1].setHeightOfTheFlight(0.0);
+                return true;
+            }
+            return false;
+        } else {
+            if (height == fields[xPosition + 1][yPosition].getHeightOfTheFlight()) {
+                addIdsOfAircraftInAccidents(id);
+                addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                fields[xPosition][yPosition].setId(0);
+                fields[xPosition][yPosition].setAircraftMark("   ");
+                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition + 1][yPosition].setId(0);
+                fields[xPosition + 1][yPosition].setAircraftMark("   ");
+                fields[xPosition + 1][yPosition].setHeightOfTheFlight(0.0);
+                return true;
+            }
+            return false;
         }
-
-
     }
 
     public static boolean isNoFly() {
@@ -255,5 +314,10 @@ public class Airspace extends Thread {
     public static int getIdInThisPositionStatic(int i, int j) {
         return fields[i][j].getId();
     }
+    public boolean isInList(int i){
+        return idsOfAircraftInAccidents.contains(i);
+    }
+
+
 
 }

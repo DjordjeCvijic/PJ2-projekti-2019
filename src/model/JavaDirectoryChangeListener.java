@@ -13,9 +13,13 @@ import java.nio.file.WatchService;
 
 public class JavaDirectoryChangeListener extends Thread {
 
-    private static Path directoryPath = FileSystems.getDefault().getPath("src" + File.separator + "events");
+    private static Path directoryPath;
+    private String name;
 
-    public JavaDirectoryChangeListener(){}
+    public JavaDirectoryChangeListener(Path dir, String n) {
+        directoryPath = dir;
+        name = n;
+    }
 
     @Override
     public void run() {
@@ -62,7 +66,13 @@ public class JavaDirectoryChangeListener extends Thread {
         if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
             Path entryCreated = (Path) event.context();
             System.out.println("New entry created:" + entryCreated);
-            MainApplicationController.setInfoText("Worning enemy aircraft");
+            if (entryCreated.endsWith("r")) {
+                System.out.println("ne smije");
+                MainApplicationController.setInfoText("Worning enemy aircraft");
+            }else {
+                MainApplicationController.newCrach();
+            }
+
         } else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
             Path entryDeleted = (Path) event.context();
             System.out.println("Exissting entry deleted:" + entryDeleted);

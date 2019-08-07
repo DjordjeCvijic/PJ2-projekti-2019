@@ -11,8 +11,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -22,19 +22,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.net.URL;
 
+import java.nio.file.FileSystems;
 import java.util.ResourceBundle;
 
-import model.Airspace;
-import model.JavaDirectoryChangeListener;
-import model.Radar;
-import model.Simulator;
+import model.*;
 
 
 public class MainApplicationController extends Thread implements Initializable {
@@ -61,25 +55,9 @@ public class MainApplicationController extends Thread implements Initializable {
 
 
         file = Radar.f;
-        //file=new File("src" + File.separator + "resources" + File.separator + "map.txt");
-        JavaDirectoryChangeListener listener = new JavaDirectoryChangeListener();
-        listener.start();
-        start();
-
-
-    }
-
-    public static void setInfoText(String s) {
-        infoText = s;
-    }
-
-
-    public void run() {
-
-
         try {
 
-            //sleep(500);
+            sleep(500);
 
             BufferedReader in = new BufferedReader(new FileReader(file));
             String[] tmp = in.readLine().split("#");
@@ -99,6 +77,47 @@ public class MainApplicationController extends Thread implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //file=new File("src" + File.separator + "resources" + File.separator + "map.txt");
+        JavaDirectoryChangeListener listener = new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "events"),"events");
+        listener.start();
+        JavaDirectoryChangeListener listener1=new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "alert"),"alert");
+
+        start();
+
+
+    }
+    public static void newCrach() {
+        System.out.println(" deserijalizacija");
+        try {
+            File f=new File("src" + File.separator + "alert");
+            String[] files=f.list();
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f+File.separator+files[files.length-1]));
+            Crash crash=(Crash)ois.readObject();
+            warning(crash.toString());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void warning(String s){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(s);
+
+        alert.showAndWait();
+    }
+
+    public static void setInfoText(String s) {
+        infoText = s;
+    }
+
+
+    public void run() {
+
+
+
         timeStamp = file.lastModified();
         while (true) {
             if (!Airspace.isIsEnemyInSky()) {
@@ -134,7 +153,7 @@ public class MainApplicationController extends Thread implements Initializable {
                                 print();
                             }
                         });
-
+                        timeStamp = file.lastModified();
 
                     }
                 }
@@ -148,7 +167,6 @@ public class MainApplicationController extends Thread implements Initializable {
     }
 
     public void print() {
-//ovo provjeriti
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
 

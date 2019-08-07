@@ -60,7 +60,7 @@ public class Aircraft extends Thread {
         return id;
     }
 
-    void setEntrance(int skyX, int skyY) {
+    public void setEntrance(int skyX, int skyY) {
 
         // System.out.println("u set ulaz,dimezije mape"+skyX+" "+skyY);//mmmmmmmm
         Random random = new Random();
@@ -80,6 +80,29 @@ public class Aircraft extends Thread {
         }
 
         //System.out.println("u set ulaz,i ideks leta:"+xPosition+" "+yPosition +flightIndex);//mmmmmmm
+    }
+
+    public void setEntrance1(int skyX, int skyY) {
+
+
+
+        flightIndex = 2;
+
+            yPosition = 0;
+            xPosition = 1;
+
+
+    }
+    public void setEntrance2(int skyX, int skyY) {
+
+
+
+        flightIndex = 0;
+
+        yPosition = skyY - 1;
+        xPosition = 1;
+
+
     }
 
     public int getXPosition() {
@@ -152,6 +175,8 @@ public class Aircraft extends Thread {
             //System.out.println("kraj rana letjelice pozzicije i ideks"+xPosition+" "+yPosition+" "+c);
 
         } while (c != -1);
+        airspace.remuveIdsOfAircraftInAccidents(id);
+        System.out.println("izasao "+id);
         if(enemy){
             Airspace.decramentEnemiesInSky();
         }

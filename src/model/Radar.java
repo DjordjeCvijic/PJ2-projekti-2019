@@ -29,12 +29,11 @@ public class Radar extends Thread {
 
         f = new File("src" + File.separator + "resources" + File.separator + "map.txt");
 
-        idOfEnemis=new ArrayList<Integer>();
+        idOfEnemis = new ArrayList<Integer>();
 
     }
 
     public void run() {
-
 
 
         while (true) {
@@ -62,19 +61,17 @@ public class Radar extends Thread {
                                 out.write("\r\n");
                                 if (Simulator.isThisEnemy(airspace.getIdInThisPosition(i, j)) && !idOfEnemis.contains(airspace.getIdInThisPosition(i, j))) {
                                     idOfEnemis.add(airspace.getIdInThisPosition(i, j));
-                                    try{
-                                        BufferedWriter out1=new BufferedWriter(new PrintWriter(
-                                                "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis())+".txt"));
+                                    try {
+                                        BufferedWriter out1 = new BufferedWriter(new PrintWriter(
+                                                "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis()) + ".txt"));
                                         out1.write(airspace.getInfo(i, j));
                                         out1.close();
-                                    }catch (Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
 
-
                                 }
-
 
                             }
                         }
@@ -85,14 +82,17 @@ public class Radar extends Thread {
                         if (airspace.isIsEnemyInSky() && airspace.getEnemiesInSky() == 0) {
                             airspace.setIsEnemyInSky(false);
                             Simulator.noFlightZoneDeactivate();
-                            System.out.println("radi");
+
                         }
-                        System.out.println(airspace.getEnemiesInSky());
+
 
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
+                if (airspace.getNumberOfAircraftInAccidents() != 0) crashInAirspace();
 
 
             }
@@ -104,6 +104,47 @@ public class Radar extends Thread {
             }
 
 
+        }
+
+    }
+
+    private void crashInAirspace() {
+        System.out.println("radi");
+        String description;
+        String time;
+        String positionOfCrash;
+        Aircraft aircraft = null;
+        Rocket rocekt = null;
+        Integer[] arr = airspace.getIdsOfAircraftToEleminate();
+        int first = arr[0];
+        int second = arr[1];
+        airspace.remuveIdsOfAircraftToEleminate(arr[0]);
+        airspace.remuveIdsOfAircraftToEleminate(arr[1]);
+        if (first < 600) {
+            aircraft = (Aircraft) Simulator.aircrafts.get(first);
+            description = aircraft.getMark();
+        } else {
+            rocekt = (Rocket) Simulator.rockets.get(first);
+            description = rocekt.getMark();
+        }
+        if (second < 600) {
+            aircraft = (Aircraft) Simulator.aircrafts.get(second);
+            description.concat(" and " + aircraft.getMark());
+            positionOfCrash = aircraft.getXPosition() + " " + aircraft.getYPosition();
+        } else {
+            rocekt = (Rocket) Simulator.rockets.get(second);
+            description.concat(" and " + rocekt.getMark());
+            positionOfCrash = rocekt.getXPosition() + " " + rocekt.getYPosition();
+        }
+
+        time=Long.toString(System.currentTimeMillis());
+
+        Crash c=new Crash(description,time,positionOfCrash);
+        try {
+            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("src" + File.separator + "alert" + File.separator + time+".ser"));
+            oos.writeObject(c);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }
