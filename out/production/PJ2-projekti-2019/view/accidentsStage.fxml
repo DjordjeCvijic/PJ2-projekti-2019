@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.AccidentsStageController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<TableView fx:id="tableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="461.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccidentsStageController">
+   <columns>
+      <TableColumn fx:id="firstAircraftColumn" prefWidth="104.80001527070999" text="FIRST AIRCRAFT" />
+      <TableColumn fx:id="secondAircraftColumn" prefWidth="128.0" text="SECOND AIRCRAFT" />
+      <TableColumn minWidth="5.60003662109375" prefWidth="210.40000915527344" text="POSITION OF CRUSH">
+         <columns>
+            <TableColumn prefWidth="95.19999694824219" text="X" fx:id="xColumn" />
+             <TableColumn fx:id="yColumn" prefWidth="112.0" text="Y" />
+         </columns></TableColumn>
+      <TableColumn fx:id="timeColumn" prefWidth="200.4000244140625" text="TIME" />
+   </columns>
+</TableView>

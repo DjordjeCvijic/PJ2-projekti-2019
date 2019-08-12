@@ -11,7 +11,7 @@ public class Radar extends Thread {
     private int skyX;
     private int skyY;
     public static File f;
-    private File fileForEnemis;
+    public static File fileAlert;
     public static List idOfEnemis;
 
     public Radar(Airspace a) {
@@ -28,6 +28,7 @@ public class Radar extends Thread {
         }
 
         f = new File("src" + File.separator + "resources" + File.separator + "map.txt");
+        fileAlert=new File("src" + File.separator + "alert");
 
         idOfEnemis = new ArrayList<Integer>();
 
@@ -42,10 +43,10 @@ public class Radar extends Thread {
 
                 try {
                     synchronized (f) {
-                        if (!Simulator.isStop() && !airspace.isIsEnemyInSky()) {
+                        if (!Simulator.isStop() && airspace.isNoFly()) {
                             airspace.notify();
                             System.out.println("notufy u radatu poslije zabrane leta");
-
+                            Airspace.setNoFly(false);
 
                         }
 
@@ -66,6 +67,8 @@ public class Radar extends Thread {
                                                 "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis()) + ".txt"));
                                         out1.write(airspace.getInfo(i, j));
                                         out1.close();
+                                        airspace.addIdsOfEnemisAircraft(airspace.getIdInThisPosition(i, j));
+                                        airspace.notify();//ide u simulator
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -108,43 +111,48 @@ public class Radar extends Thread {
 
     }
 
-    private void crashInAirspace() {
-        System.out.println("radi");
-        String description;
-        String time;
-        String positionOfCrash;
-        Aircraft aircraft = null;
-        Rocket rocekt = null;
-        Integer[] arr = airspace.getIdsOfAircraftToEleminate();
-        int first = arr[0];
-        int second = arr[1];
-        airspace.remuveIdsOfAircraftToEleminate(arr[0]);
-        airspace.remuveIdsOfAircraftToEleminate(arr[1]);
-        if (first < 600) {
-            aircraft = (Aircraft) Simulator.aircrafts.get(first);
-            description = aircraft.getMark();
-        } else {
-            rocekt = (Rocket) Simulator.rockets.get(first);
-            description = rocekt.getMark();
-        }
-        if (second < 600) {
-            aircraft = (Aircraft) Simulator.aircrafts.get(second);
-            description.concat(" and " + aircraft.getMark());
-            positionOfCrash = aircraft.getXPosition() + " " + aircraft.getYPosition();
-        } else {
-            rocekt = (Rocket) Simulator.rockets.get(second);
-            description.concat(" and " + rocekt.getMark());
-            positionOfCrash = rocekt.getXPosition() + " " + rocekt.getYPosition();
-        }
+    private synchronized void crashInAirspace() {
+        synchronized (fileAlert) {
+            String description;
+            String time;
+            String positionOfCrash;
+            Aircraft aircraft = null;
+            Rocket rocekt = null;
+            Integer[] arr = airspace.getIdsOfAircraftToEleminate();
+            int first = arr[0];
+            int second = arr[1];
+            airspace.remuveIdsOfAircraftToEleminate(arr[0]);
+            airspace.remuveIdsOfAircraftToEleminate(arr[1]);
+            if (first < 600) {
+                aircraft = (Aircraft) Simulator.aircrafts.get(first);
+                description = aircraft.getMark()+"(id:"+aircraft.getIdOfAircraft()+")";
+            } else {
+                rocekt = (Rocket) Simulator.rockets.get(first);
+                description = rocekt.getMark()+"(id:"+rocekt.getIdOfRocket()+")";
+            }
+            if (second < 600) {
 
-        time=Long.toString(System.currentTimeMillis());
+                aircraft = (Aircraft) Simulator.aircrafts.get(second);
+                description=description.concat(" and " + aircraft.getMark()+"(id:"+aircraft.getIdOfAircraft()+")");
+                positionOfCrash = aircraft.getXPosition() + " " + aircraft.getYPosition();
+            } else {
+                rocekt = (Rocket) Simulator.rockets.get(second);
+                description=description.concat(" and " + rocekt.getMark()+"(id:"+rocekt.getIdOfRocket()+")");
+                positionOfCrash = rocekt.getXPosition() + " " + rocekt.getYPosition();
+            }
 
-        Crash c=new Crash(description,time,positionOfCrash);
-        try {
-            ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("src" + File.separator + "alert" + File.separator + time+".ser"));
-            oos.writeObject(c);
-        }catch (Exception e){
-            e.printStackTrace();
+            time = Long.toString(System.currentTimeMillis());
+
+            Crash c = new Crash(description, time, positionOfCrash);
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileAlert + File.separator + time + ".ser"));
+                oos.writeObject(c);
+                System.out.println(c.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
         }
 
     }

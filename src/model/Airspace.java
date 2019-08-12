@@ -10,14 +10,30 @@ public class Airspace extends Thread {
     private int numberOfAircrafts = 0;
     private int skyX;
     private int skyY;
-    public static boolean noFly;
+    public static boolean noFly=false;
     private static int enemiesInSky = 0;
     private static int inLandInSky = 0;
     public static boolean isEnemyInSky = false;
-    private ArrayList<Integer> idsOfAircraftInAccidents;
+    private ArrayList<Integer> idsOfAircraftInAccidents;//idsOfAircraftInAccidents
     private ArrayList<Integer> idsOfAircraftToEleminate;
     private int numberOfAircraftInAccidents;
+    private ArrayList<Integer> idsOfEnemisAircraft;//da simulator zna koga da prati
 
+    public void addIdsOfEnemisAircraft(int i){
+        idsOfEnemisAircraft.add(i);
+    }
+    public int getIdsOfEnemisAircraft(){
+        if(idsOfEnemisAircraft.isEmpty())return 0;
+        int i= idsOfEnemisAircraft.get(0);//uvijek ce biti samo jedan neprijateljksi
+        Iterator itr = idsOfEnemisAircraft.iterator();
+        while (itr.hasNext())
+        {
+            int x = (Integer)itr.next();
+            if (x == i)
+                itr.remove();
+        }
+        return i;
+    }
     public Integer[] getIdsOfAircraftToEleminate() {
         Integer []arr=new Integer[idsOfAircraftToEleminate.size()];
         arr=idsOfAircraftToEleminate.toArray(arr);
@@ -31,6 +47,7 @@ public class Airspace extends Thread {
     public Airspace() {
         idsOfAircraftToEleminate=new ArrayList<Integer>();
         idsOfAircraftInAccidents = new ArrayList<Integer>();
+        idsOfEnemisAircraft=new ArrayList<Integer>();
         numberOfAircraftInAccidents = 0;
     }
 
@@ -249,6 +266,8 @@ public class Airspace extends Thread {
             }
             return false;
         } else {
+
+
             if (height == fields[xPosition + 1][yPosition].getHeightOfTheFlight()) {
                 addIdsOfAircraftInAccidents(id);
                 addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());

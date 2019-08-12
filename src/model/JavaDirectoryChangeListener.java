@@ -13,7 +13,7 @@ import java.nio.file.WatchService;
 
 public class JavaDirectoryChangeListener extends Thread {
 
-    private static Path directoryPath;
+    private  Path directoryPath;
     private String name;
 
     public JavaDirectoryChangeListener(Path dir, String n) {
@@ -66,10 +66,13 @@ public class JavaDirectoryChangeListener extends Thread {
         if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
             Path entryCreated = (Path) event.context();
             System.out.println("New entry created:" + entryCreated);
-            if (entryCreated.endsWith("r")) {
-                System.out.println("ne smije");
+
+            if (name.equals("events")) {
+                System.out.println("Strana letjelica"+name);
                 MainApplicationController.setInfoText("Worning enemy aircraft");
-            }else {
+           }
+            if(name.equals("alert")) {
+                System.out.println("sudar"+name);
                 MainApplicationController.newCrach();
             }
 

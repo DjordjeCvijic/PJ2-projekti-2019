@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
 import java.io.*;
 import java.net.URL;
 
@@ -48,6 +49,7 @@ public class MainApplicationController extends Thread implements Initializable {
     private String[][] map;
     private long timeStamp;
     private static String infoText;
+    private static File fileAlert;
 
 
     @Override
@@ -78,35 +80,48 @@ public class MainApplicationController extends Thread implements Initializable {
             e.printStackTrace();
         }
         //file=new File("src" + File.separator + "resources" + File.separator + "map.txt");
-        JavaDirectoryChangeListener listener = new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "events"),"events");
+        JavaDirectoryChangeListener listener = new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "events"), "events");
         listener.start();
-        JavaDirectoryChangeListener listener1=new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "alert"),"alert");
-
+        JavaDirectoryChangeListener listener1 = new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "alert"), "alert");
+        listener1.start();
         start();
 
+        fileAlert = Radar.fileAlert;
 
     }
-    public static void newCrach() {
-        System.out.println(" deserijalizacija");
-        try {
-            File f=new File("src" + File.separator + "alert");
-            String[] files=f.list();
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f+File.separator+files[files.length-1]));
-            Crash crash=(Crash)ois.readObject();
-            warning(crash.toString());
 
-        }catch (Exception e){
-            e.printStackTrace();
+    public static void newCrach() {
+        synchronized (fileAlert) {
+            try {
+
+                String[] files = fileAlert.list();
+
+
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileAlert + File.separator + files[files.length-1]));
+
+                Crash crash = (Crash) ois.readObject();
+                warning(crash.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static void warning(String s){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(s);
+    public static void warning(String s) {
 
-        alert.showAndWait();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Information Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText(s);
+                alert.show();
+            }
+        });
+
+
     }
 
     public static void setInfoText(String s) {
@@ -115,7 +130,6 @@ public class MainApplicationController extends Thread implements Initializable {
 
 
     public void run() {
-
 
 
         timeStamp = file.lastModified();

@@ -51,7 +51,7 @@ public class Simulator extends Thread {
 
 
         this.timeStamp = f.lastModified();
-        //while (true) {
+        while (true) {
             synchronized (airspace) {
 
                 if (stop) {
@@ -63,9 +63,16 @@ public class Simulator extends Thread {
                         e.printStackTrace();
                     }
                 }
+                Integer idOfEnemy=airspace.getIdsOfEnemisAircraft();
+                if(idOfEnemy!=0){
 
 
-                //samo za testiranje sudara:
+                    System.out.println(idOfEnemy);
+
+                }
+
+
+                /*//samo za testiranje sudara:
                 newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), 100, new HashMap<Integer, Object>(), new ArrayList(),
                         random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
                 newAircraft.setEntrance1(skyX, skyY);
@@ -80,13 +87,13 @@ public class Simulator extends Thread {
 
                 aircrafts.put(newAircraft1.getIdOfAircraft(), newAircraft1);
                 airspace.addObjectOnSky(newAircraft1.getMark(), newAircraft1.getXPosition(), newAircraft1.getYPosition(), newAircraft1.getIdOfAircraft());
-                newAircraft1.start();
+                newAircraft1.start();*/
 
 
 
 
 
-                /*if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
+                if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(f));
                         String s = in.readLine();
@@ -198,18 +205,20 @@ public class Simulator extends Thread {
                     }
 
 
-                }*/
+                }
+                try {
+                    System.out.println();
+                    airspace.wait(timeInterval * 1000);
+                    //sleep(timeInterval * 1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 
             //airspace.print(skyX,skyY);
-            /*try {
 
-                sleep(timeInterval * 1000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-        //}
+        }
 
 
     }
@@ -294,7 +303,7 @@ public class Simulator extends Thread {
 
     public static synchronized void noFlightZoneDeactivate() {
 
-        Airspace.setNoFly(false);
+
         stop = false;
 
 
@@ -307,7 +316,7 @@ public class Simulator extends Thread {
     public static boolean isThisEnemy(int id) {
 
 
-        if(id==0){
+        if (id == 0) {
             return false;
         }
 
@@ -315,11 +324,11 @@ public class Simulator extends Thread {
         if (id < 600) {
 
             Aircraft a = (Aircraft) aircrafts.get(id);
-            tmp=a.isEnemy();
+            tmp = a.isEnemy();
 
-        }else{
-            Rocket r=(Rocket)rockets.get(id);
-            tmp=r.isEnemy();
+        } else {
+            Rocket r = (Rocket) rockets.get(id);
+            tmp = r.isEnemy();
 
         }
 
