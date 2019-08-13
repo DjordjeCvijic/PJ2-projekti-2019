@@ -63,11 +63,10 @@ public class Simulator extends Thread {
                         e.printStackTrace();
                     }
                 }
-                Integer idOfEnemy=airspace.getIdsOfEnemisAircraft();
-                if(idOfEnemy!=0){
-
-
+                Integer idOfEnemy = airspace.getIdsOfEnemisAircraft();
+                if (idOfEnemy != 0) {
                     System.out.println(idOfEnemy);
+                    sendMilitaryAircraft(idOfEnemy);
 
                 }
 
@@ -90,10 +89,7 @@ public class Simulator extends Thread {
                 newAircraft1.start();*/
 
 
-
-
-
-                if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
+                else if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(f));
                         String s = in.readLine();
@@ -106,13 +102,13 @@ public class Simulator extends Thread {
                         if (numberOfInlandAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
 
-                            addMillitaryAircraft(nextAircraft, true);
+                            addMilitaryAircraft(nextAircraft, true);
                             numberOfInlandAircrafts--;
 
 
                         } else if (numberOfEnemiesAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
-                            addMillitaryAircraft(nextAircraft, false);
+                            addMilitaryAircraft(nextAircraft, false);
                             numberOfEnemiesAircrafts--;
 
 
@@ -127,8 +123,7 @@ public class Simulator extends Thread {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else //if(airspace.getEnemiesInSky()==-1)
-                {
+                } else {
 
 
                     String nextAircraft = aircraftToAdd[random.nextInt(8)];
@@ -223,8 +218,58 @@ public class Simulator extends Thread {
 
     }
 
+    private synchronized void sendMilitaryAircraft(Integer idOfEnemy) {
+        if (idOfEnemy < 600) {
+            Aircraft objectToAttack = (Aircraft) aircrafts.get(idOfEnemy);
 
-    private void addMillitaryAircraft(String mark, boolean inland) {
+            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                    true, airspace);
+            newAircraftForAttack.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 1);
+            newAircraftForAttack.setInAttack(true);
+            newAircraftForAttack.setIdToAttack(idOfEnemy);
+            aircrafts.put(newAircraftForAttack.getIdOfAircraft(), newAircraftForAttack);
+            airspace.addObjectOnSky(newAircraftForAttack.getMark(), newAircraftForAttack.getXPosition(), newAircraftForAttack.getYPosition(), newAircraftForAttack.getIdOfAircraft());
+            newAircraftForAttack.start();
+
+
+            Aircraft newAircraftForAttack1 = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                    true, airspace);
+            newAircraftForAttack1.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 2);
+            newAircraftForAttack1.setInAttack(true);
+            newAircraftForAttack1.setIdToAttack(idOfEnemy);
+            aircrafts.put(newAircraftForAttack1.getIdOfAircraft(), newAircraftForAttack1);
+            airspace.addObjectOnSky(newAircraftForAttack1.getMark(), newAircraftForAttack1.getXPosition(), newAircraftForAttack1.getYPosition(), newAircraftForAttack1.getIdOfAircraft());
+            newAircraftForAttack1.start();
+        } else {
+            Rocket objectToAttack = (Rocket) rockets.get(idOfEnemy);
+
+            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                    true, airspace);
+            newAircraftForAttack.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 1);
+            newAircraftForAttack.setInAttack(true);
+            newAircraftForAttack.setIdToAttack(idOfEnemy);
+            aircrafts.put(newAircraftForAttack.getIdOfAircraft(), newAircraftForAttack);
+            airspace.addObjectOnSky(newAircraftForAttack.getMark(), newAircraftForAttack.getXPosition(), newAircraftForAttack.getYPosition(), newAircraftForAttack.getIdOfAircraft());
+            newAircraftForAttack.start();
+
+
+            Aircraft newAircraftForAttack1 = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                    true, airspace);
+            newAircraftForAttack1.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 2);
+            newAircraftForAttack1.setInAttack(true);
+            newAircraftForAttack1.setIdToAttack(idOfEnemy);
+            aircrafts.put(newAircraftForAttack1.getIdOfAircraft(), newAircraftForAttack1);
+            airspace.addObjectOnSky(newAircraftForAttack1.getMark(), newAircraftForAttack1.getXPosition(), newAircraftForAttack1.getYPosition(), newAircraftForAttack1.getIdOfAircraft());
+            newAircraftForAttack1.start();
+
+
+        }
+
+
+    }
+
+
+    private void addMilitaryAircraft(String mark, boolean inland) {
         if ("MHA".equals(mark)) {
             Aircraft newAircraft = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
                     inland, airspace);

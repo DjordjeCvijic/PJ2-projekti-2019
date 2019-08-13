@@ -19,11 +19,18 @@ public class Aircraft extends Thread {
     private int xPosition;
     private int yPosition;
     private boolean canFly = true;
-    private boolean enemy=false;
+    private boolean enemy = false;
+    private boolean inAttack = false;
+    private int idToAttack = 0;
 
     private Airspace airspace;
 
     private String mark;
+
+    public int getFlightIndex() {
+        return flightIndex;
+    }
+
 
     public Aircraft() {
     }
@@ -83,24 +90,68 @@ public class Aircraft extends Thread {
     }
 
     public void setEntrance1(int skyX, int skyY) {
-
-
-
         flightIndex = 2;
 
-            yPosition = 0;
-            xPosition = 1;
+        yPosition = 0;
+        xPosition = 1;
 
 
-    }
+    }//za testiranje sudara
+
     public void setEntrance2(int skyX, int skyY) {
-
-
-
         flightIndex = 0;
 
         yPosition = skyY - 1;
         xPosition = 1;
+
+
+    }
+
+    public void setEntranceForAttack(int skyX, int skyY, int flightIndex, int xPositionOfEnemy, int yPositionOfEnemy, int num) {
+        this.flightIndex = flightIndex;
+        if (num == 1) {
+            if (flightIndex == 0) {
+                if (xPositionOfEnemy == skyX - 1) {//donji desni cosak
+                    xPosition = xPositionOfEnemy;
+                    yPosition = skyY;
+                } else {
+                    yPosition = skyY - 1;
+                    xPosition = xPositionOfEnemy + 1;
+                }
+            } else if (flightIndex == 1) {
+                if (yPositionOfEnemy == 0) {//donji lijevi cosak
+                    yPosition = yPositionOfEnemy;
+                    xPosition = skyX;
+                } else {
+                    xPosition = skyX - 1;
+                    yPosition = yPositionOfEnemy - 1;
+                }
+            } else if (flightIndex == 2) {
+                if (xPositionOfEnemy == 0) {//grnji lijevi cosak
+                    xPosition = xPositionOfEnemy;
+                    yPosition = -1;
+                } else {
+                    yPosition = 0;
+                    xPosition = xPositionOfEnemy - 1;
+                }
+            } else {
+                if (yPositionOfEnemy == skyY - 1) {//gornji desni cosak
+                    yPosition=yPositionOfEnemy;
+                    xPosition=-1;
+                }else{
+                    xPosition=0;
+                    yPosition=yPositionOfEnemy+1;
+                }
+            }
+
+        }
+        else{
+
+
+
+
+            
+        }
 
 
     }
@@ -128,7 +179,7 @@ public class Aircraft extends Thread {
                 }
                 // System.out.println("u ranu letjelice pozicije"+xPosition+" "+yPosition);
 
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight);
                 //System.out.println("u ranu letjelice pozicije i ideks"+xPosition+" "+yPosition+" "+c);
                 if (c == 0) {
                     yPosition--;
@@ -155,7 +206,7 @@ public class Aircraft extends Thread {
                 }
                 flightIndex = modFlightIndex(flightIndex);//indesk za skretanje
                 // System.out.println(flightIndex);
-                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id,heightOfTheFlight);
+                c = airspace.flight(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight);
                 if (c == 0) {
                     yPosition--;
 
@@ -176,8 +227,8 @@ public class Aircraft extends Thread {
 
         } while (c != -1);
         airspace.remuveIdsOfAircraftInAccidents(id);
-        System.out.println("izasao "+id);
-        if(enemy){
+        System.out.println("izasao " + id);
+        if (enemy) {
             Airspace.decramentEnemiesInSky();
         }
 
@@ -243,5 +294,21 @@ public class Aircraft extends Thread {
 
     public void setEnemy(boolean enemy) {
         this.enemy = enemy;
+    }
+
+    public int getIdToAttack() {
+        return idToAttack;
+    }
+
+    public void setIdToAttack(int idToAttack) {
+        this.idToAttack = idToAttack;
+    }
+
+    public boolean isInAttack() {
+        return inAttack;
+    }
+
+    public void setInAttack(boolean inAttack) {
+        this.inAttack = inAttack;
     }
 }

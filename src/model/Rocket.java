@@ -20,7 +20,9 @@ public class Rocket extends Thread {
     public Rocket() {
     }
 
-    ;
+    public int getFlightIndex() {
+        return flightIndex;
+    }
 
     public Rocket(double range, double height, String mark, Airspace a) {
         this.range = range;
