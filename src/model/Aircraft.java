@@ -136,21 +136,50 @@ public class Aircraft extends Thread {
                 }
             } else {
                 if (yPositionOfEnemy == skyY - 1) {//gornji desni cosak
-                    yPosition=yPositionOfEnemy;
-                    xPosition=-1;
-                }else{
-                    xPosition=0;
-                    yPosition=yPositionOfEnemy+1;
+                    yPosition = yPositionOfEnemy;
+                    xPosition = -1;
+                } else {
+                    xPosition = 0;
+                    yPosition = yPositionOfEnemy + 1;
                 }
             }
 
-        }
-        else{
+        } else {//zad drugog napadaca
+            if (flightIndex == 0) {
+                if (xPositionOfEnemy == 0) {//gornji desni cosak
+                    xPosition = xPositionOfEnemy;
+                    yPosition = skyY;
+                } else {
+                    yPosition = skyY - 1;
+                    xPosition = xPositionOfEnemy -1;
+                }
+            } else if (flightIndex == 1) {
+                if (yPositionOfEnemy == skyY-1) {//donji desni cosak
+                    yPosition = skyY-1;
+                    xPosition = skyX;
+                } else {
+                    xPosition = skyX - 1;
+                    yPosition = yPositionOfEnemy +1;
+                }
+            } else if (flightIndex == 2) {
+                if (xPositionOfEnemy == skyX-1) {//donji lijevi cosak
+                    xPosition = skyX-1;
+                    yPosition = -1;
+                } else {
+                    yPosition = 0;
+                    xPosition = xPositionOfEnemy + 1;
+                }
+            } else {
+                if (yPositionOfEnemy == 0) {//gornji lijevi cosak
+                    yPosition = 0;
+                    xPosition = -1;
+                } else {
+                    xPosition = 0;
+                    yPosition = yPositionOfEnemy - 1;
+                }
+            }
 
 
-
-
-            
         }
 
 
