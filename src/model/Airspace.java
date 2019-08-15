@@ -10,7 +10,7 @@ public class Airspace extends Thread {
     private int numberOfAircrafts = 0;
     private int skyX;
     private int skyY;
-    public static boolean noFly=false;
+    public static boolean noFly = false;
     private static int enemiesInSky = 0;
     private static int inLandInSky = 0;
     public static boolean isEnemyInSky = false;
@@ -19,24 +19,29 @@ public class Airspace extends Thread {
     private int numberOfAircraftInAccidents;
     private ArrayList<Integer> idsOfEnemisAircraft;//da simulator zna koga da prati
 
-    public void addIdsOfEnemisAircraft(int i){
+    public int getNumberOfEnemisAircraft() {
+        return idsOfEnemisAircraft.size();
+    }
+
+    public void addIdsOfEnemisAircraft(int i) {
         idsOfEnemisAircraft.add(i);
     }
-    public int getIdsOfEnemisAircraft(){
-        if(idsOfEnemisAircraft.isEmpty())return 0;
-        int i= idsOfEnemisAircraft.get(0);//uvijek ce biti samo jedan neprijateljksi
+
+    public int getIdsOfEnemisAircraft() {
+        if (idsOfEnemisAircraft.isEmpty()) return 0;
+        int i = idsOfEnemisAircraft.get(0);//uvijek ce biti samo jedan neprijateljksi
         Iterator itr = idsOfEnemisAircraft.iterator();
-        while (itr.hasNext())
-        {
-            int x = (Integer)itr.next();
+        while (itr.hasNext()) {
+            int x = (Integer) itr.next();
             if (x == i)
                 itr.remove();
         }
         return i;
     }
+
     public Integer[] getIdsOfAircraftToEleminate() {
-        Integer []arr=new Integer[idsOfAircraftToEleminate.size()];
-        arr=idsOfAircraftToEleminate.toArray(arr);
+        Integer[] arr = new Integer[idsOfAircraftToEleminate.size()];
+        arr = idsOfAircraftToEleminate.toArray(arr);
         return arr;
     }
 
@@ -45,9 +50,9 @@ public class Airspace extends Thread {
     }
 
     public Airspace() {
-        idsOfAircraftToEleminate=new ArrayList<Integer>();
+        idsOfAircraftToEleminate = new ArrayList<Integer>();
         idsOfAircraftInAccidents = new ArrayList<Integer>();
-        idsOfEnemisAircraft=new ArrayList<Integer>();
+        idsOfEnemisAircraft = new ArrayList<Integer>();
         numberOfAircraftInAccidents = 0;
     }
 
@@ -60,19 +65,18 @@ public class Airspace extends Thread {
 
     public void remuveIdsOfAircraftInAccidents(int i) {
         Iterator itr = idsOfAircraftInAccidents.iterator();
-        while (itr.hasNext())
-        {
-            int x = (Integer)itr.next();
+        while (itr.hasNext()) {
+            int x = (Integer) itr.next();
             if (x == i)
                 itr.remove();
         }
 
     }
+
     public void remuveIdsOfAircraftToEleminate(int i) {
         Iterator itr = idsOfAircraftToEleminate.iterator();
-        while (itr.hasNext())
-        {
-            int x = (Integer)itr.next();
+        while (itr.hasNext()) {
+            int x = (Integer) itr.next();
             if (x == i)
                 itr.remove();
         }
@@ -94,14 +98,14 @@ public class Airspace extends Thread {
     }
 
     public synchronized void addObjectOnSky(String mark, int x, int y, int id) {//moze se desiti sudar prilikom ulaza.Treba obraditi taj slucaj
+        if (x >= 0 && x < skyX && y >= 0 && y < skyY) {
+            fields[x][y].setAircraftMark(mark);
+            fields[x][y].setId(id);
+            numberOfAircrafts++;
+        }
 
-        fields[x][y].setAircraftMark(mark);
-        fields[x][y].setId(id);
-        numberOfAircrafts++;
 
     }
-
-
 
 
     public int getSkyX() {
@@ -120,6 +124,7 @@ public class Airspace extends Thread {
     public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
 
         if (idsOfAircraftInAccidents.contains(id)) return -1;
+        // if()
 
 
         //System.out.println("u letu pozocije prije pomicaja i ideks"+ xPosition+" "+yPosition+" "+flightIndex);
@@ -198,7 +203,7 @@ public class Airspace extends Thread {
                 fields[xPosition + 1][yPosition].setHeightOfTheFlight(height);
             }
         }
-        if (fields[xPosition][yPosition].isSecondAircraft()) {
+        if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
             if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
@@ -221,6 +226,240 @@ public class Airspace extends Thread {
         }
         //System.out.println("u letu pozocije poslije pomicaja i ideks"+ xPosition+" "+yPosition+" "+flightIndex);
         return f;
+    }
+
+    public synchronized boolean check(int xPosition, int yPosition, int flightIndex, String mark, int id, double heightOfTheFlight) {
+        Aircraft a = null;
+        if (flightIndex == 0) {
+            a = (Aircraft) Simulator.aircrafts.get(fields[xPosition - 1][yPosition].getId());
+            if (id == a.getIdToAttack()) {
+                if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                    if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                        fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                        fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                        fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                    }
+
+
+                    fields[xPosition][yPosition].setSecondAircraft(false);
+                    fields[xPosition][yPosition].setSecondId(0);
+                    fields[xPosition][yPosition].setSecondMar("   ");
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                } else {
+                    fields[xPosition][yPosition].setId(0);
+                    fields[xPosition][yPosition].setAircraftMark("   ");
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                }
+                return true;
+
+            } else {
+                a = (Aircraft) Simulator.aircrafts.get(fields[xPosition + 1][yPosition].getId());
+                if (id == a.getIdToAttack()) {
+                    if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                        if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                            fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                            fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                            fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                        }
+
+
+                        fields[xPosition][yPosition].setSecondAircraft(false);
+                        fields[xPosition][yPosition].setSecondId(0);
+                        fields[xPosition][yPosition].setSecondMar("   ");
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                    } else {
+                        fields[xPosition][yPosition].setId(0);
+                        fields[xPosition][yPosition].setAircraftMark("   ");
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    }
+                    return true;
+
+                }
+
+            }
+
+        }
+        if (flightIndex == 1) {
+            a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition+1].getId());
+            if (id == a.getIdToAttack()) {
+                if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                    if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                        fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                        fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                        fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                    }
+
+
+                    fields[xPosition][yPosition].setSecondAircraft(false);
+                    fields[xPosition][yPosition].setSecondId(0);
+                    fields[xPosition][yPosition].setSecondMar("   ");
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                } else {
+                    fields[xPosition][yPosition].setId(0);
+                    fields[xPosition][yPosition].setAircraftMark("   ");
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                }
+                return true;
+
+            } else {
+                a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition-1].getId());
+                if (id == a.getIdToAttack()) {
+                    if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                        if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                            fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                            fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                            fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                        }
+
+
+                        fields[xPosition][yPosition].setSecondAircraft(false);
+                        fields[xPosition][yPosition].setSecondId(0);
+                        fields[xPosition][yPosition].setSecondMar("   ");
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                    } else {
+                        fields[xPosition][yPosition].setId(0);
+                        fields[xPosition][yPosition].setAircraftMark("   ");
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    }
+                    return true;
+
+                }
+
+            }
+
+        }
+        if (flightIndex == 2) {
+            a = (Aircraft) Simulator.aircrafts.get(fields[xPosition - 1][yPosition].getId());
+            if (id == a.getIdToAttack()) {
+                if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                    if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                        fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                        fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                        fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                    }
+
+
+                    fields[xPosition][yPosition].setSecondAircraft(false);
+                    fields[xPosition][yPosition].setSecondId(0);
+                    fields[xPosition][yPosition].setSecondMar("   ");
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                } else {
+                    fields[xPosition][yPosition].setId(0);
+                    fields[xPosition][yPosition].setAircraftMark("   ");
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                }
+                return true;
+
+            } else {
+                a = (Aircraft) Simulator.aircrafts.get(fields[xPosition + 1][yPosition].getId());
+                if (id == a.getIdToAttack()) {
+                    if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                        if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                            fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                            fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                            fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                        }
+
+
+                        fields[xPosition][yPosition].setSecondAircraft(false);
+                        fields[xPosition][yPosition].setSecondId(0);
+                        fields[xPosition][yPosition].setSecondMar("   ");
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                    } else {
+                        fields[xPosition][yPosition].setId(0);
+                        fields[xPosition][yPosition].setAircraftMark("   ");
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    }
+                    return true;
+
+                }
+
+            }
+
+        }
+        if (flightIndex == 3) {
+            a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition+1].getId());
+            if (id == a.getIdToAttack()) {
+                if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                    if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                        fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                        fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                        fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                    }
+
+
+                    fields[xPosition][yPosition].setSecondAircraft(false);
+                    fields[xPosition][yPosition].setSecondId(0);
+                    fields[xPosition][yPosition].setSecondMar("   ");
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                } else {
+                    fields[xPosition][yPosition].setId(0);
+                    fields[xPosition][yPosition].setAircraftMark("   ");
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                }
+                return true;
+
+            } else {
+                a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition-1].getId());
+                if (id == a.getIdToAttack()) {
+                    if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
+
+
+                        if (fields[xPosition][yPosition].getAircraftMark().equals(mark)) {
+                            fields[xPosition][yPosition].setAircraftMark(fields[xPosition][yPosition].getSecondMar());
+                            fields[xPosition][yPosition].setId(fields[xPosition][yPosition].getSecondId());
+                            fields[xPosition][yPosition].setHeightOfTheFlight(fields[xPosition][yPosition].getSecondHeightOfTheFlight());
+                        }
+
+
+                        fields[xPosition][yPosition].setSecondAircraft(false);
+                        fields[xPosition][yPosition].setSecondId(0);
+                        fields[xPosition][yPosition].setSecondMar("   ");
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+
+
+                    } else {
+                        fields[xPosition][yPosition].setId(0);
+                        fields[xPosition][yPosition].setAircraftMark("   ");
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    }
+                    return true;
+
+                }
+
+            }
+
+        }
+
+        return false;
     }
 
     private synchronized boolean crash(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
@@ -333,10 +572,10 @@ public class Airspace extends Thread {
     public static int getIdInThisPositionStatic(int i, int j) {
         return fields[i][j].getId();
     }
-    public boolean isInList(int i){
+
+    public boolean isInList(int i) {
         return idsOfAircraftInAccidents.contains(i);
     }
-
 
 
 }

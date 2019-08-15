@@ -54,7 +54,7 @@ public class Simulator extends Thread {
         while (true) {
             synchronized (airspace) {
 
-                if (stop) {
+                if (stop && airspace.getNumberOfEnemisAircraft()==0 ) {
                     try {
                         System.out.println("wait u simulatoru");
                         airspace.wait();
@@ -63,9 +63,10 @@ public class Simulator extends Thread {
                         e.printStackTrace();
                     }
                 }
+
                 Integer idOfEnemy = airspace.getIdsOfEnemisAircraft();
                 if (idOfEnemy != 0) {
-                    System.out.println(idOfEnemy);
+                    System.out.println("id neprijatelja: "+idOfEnemy);
                     sendMilitaryAircraft(idOfEnemy);
 
                 }

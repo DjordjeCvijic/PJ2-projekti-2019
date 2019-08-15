@@ -55,9 +55,6 @@ public class Aircraft extends Thread {
 
     }
 
-    private boolean isInland() {
-        return false;
-    }
 
     public String getMark() {
         return mark;
@@ -151,19 +148,19 @@ public class Aircraft extends Thread {
                     yPosition = skyY;
                 } else {
                     yPosition = skyY - 1;
-                    xPosition = xPositionOfEnemy -1;
+                    xPosition = xPositionOfEnemy - 1;
                 }
             } else if (flightIndex == 1) {
-                if (yPositionOfEnemy == skyY-1) {//donji desni cosak
-                    yPosition = skyY-1;
+                if (yPositionOfEnemy == skyY - 1) {//donji desni cosak
+                    yPosition = skyY - 1;
                     xPosition = skyX;
                 } else {
                     xPosition = skyX - 1;
-                    yPosition = yPositionOfEnemy +1;
+                    yPosition = yPositionOfEnemy + 1;
                 }
             } else if (flightIndex == 2) {
-                if (xPositionOfEnemy == skyX-1) {//donji lijevi cosak
-                    xPosition = skyX-1;
+                if (xPositionOfEnemy == skyX - 1) {//donji lijevi cosak
+                    xPosition = skyX - 1;
                     yPosition = -1;
                 } else {
                     yPosition = 0;
@@ -198,8 +195,10 @@ public class Aircraft extends Thread {
 
         int c = 0;
         do {
-            //if ((mark.equals("MHA") || mark.equals("MBM") || mark.equals("MiR")) || (canFly && airspace.getEnemiesInSky() == 0)) {
-            if (canFly) {
+            if (isEnemy() && airspace.check(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight)) {
+                c = -1;
+
+            } else if (canFly) {
                 try {
                     sleep(flightSpeed * 1000);
 
@@ -263,6 +262,8 @@ public class Aircraft extends Thread {
 
 
     }
+
+
 
     private int modFlightIndex(int indeks) {
         int min;

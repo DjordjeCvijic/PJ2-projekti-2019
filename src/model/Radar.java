@@ -68,6 +68,7 @@ public class Radar extends Thread {
                                         out1.write(airspace.getInfo(i, j));
                                         out1.close();
                                         airspace.addIdsOfEnemisAircraft(airspace.getIdInThisPosition(i, j));
+                                        System.out.println("notify za stranu letjelicu u radaru");
                                         airspace.notify();//ide u simulator
                                     } catch (Exception e) {
                                         e.printStackTrace();
