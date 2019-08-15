@@ -232,7 +232,7 @@ public class Airspace extends Thread {
         Aircraft a = null;
         if (flightIndex == 0) {
             a = (Aircraft) Simulator.aircrafts.get(fields[xPosition - 1][yPosition].getId());
-            if (id == a.getIdToAttack()) {
+            if (a!=null && id == a.getIdToAttack()) {
                 if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -258,7 +258,7 @@ public class Airspace extends Thread {
 
             } else {
                 a = (Aircraft) Simulator.aircrafts.get(fields[xPosition + 1][yPosition].getId());
-                if (id == a.getIdToAttack()) {
+                if (a!=null && id == a.getIdToAttack()) {
                     if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -289,7 +289,7 @@ public class Airspace extends Thread {
         }
         if (flightIndex == 1) {
             a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition+1].getId());
-            if (id == a.getIdToAttack()) {
+            if (a!=null && id == a.getIdToAttack()) {
                 if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -315,7 +315,7 @@ public class Airspace extends Thread {
 
             } else {
                 a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition-1].getId());
-                if (id == a.getIdToAttack()) {
+                if (a!=null && id == a.getIdToAttack()) {
                     if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -346,7 +346,7 @@ public class Airspace extends Thread {
         }
         if (flightIndex == 2) {
             a = (Aircraft) Simulator.aircrafts.get(fields[xPosition - 1][yPosition].getId());
-            if (id == a.getIdToAttack()) {
+            if (a!=null && id == a.getIdToAttack()) {
                 if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -372,7 +372,7 @@ public class Airspace extends Thread {
 
             } else {
                 a = (Aircraft) Simulator.aircrafts.get(fields[xPosition + 1][yPosition].getId());
-                if (id == a.getIdToAttack()) {
+                if (a!=null && id == a.getIdToAttack()) {
                     if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -403,7 +403,7 @@ public class Airspace extends Thread {
         }
         if (flightIndex == 3) {
             a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition+1].getId());
-            if (id == a.getIdToAttack()) {
+            if (a!=null && id == a.getIdToAttack()) {
                 if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -429,7 +429,7 @@ public class Airspace extends Thread {
 
             } else {
                 a = (Aircraft) Simulator.aircrafts.get(fields[xPosition ][yPosition-1].getId());
-                if (id == a.getIdToAttack()) {
+                if (a!=null && id == a.getIdToAttack()) {
                     if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 
@@ -492,6 +492,7 @@ public class Airspace extends Thread {
             }
             return false;
         } else if (flightIndex == 2) {
+
             if (height == fields[xPosition][yPosition + 1].getHeightOfTheFlight()) {
                 addIdsOfAircraftInAccidents(id);
                 addIdsOfAircraftInAccidents(fields[xPosition][yPosition + 1].getId());
