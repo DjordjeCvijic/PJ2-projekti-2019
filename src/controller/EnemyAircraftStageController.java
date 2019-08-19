@@ -34,7 +34,7 @@ public class EnemyAircraftStageController implements Initializable{
 
 
 
-    public static ObservableList<EnemyMillitaryAircraft> enemis = FXCollections.observableArrayList();
+    public  ObservableList<EnemyMillitaryAircraft> enemis = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

@@ -65,23 +65,23 @@ public class JavaDirectoryChangeListener extends Thread {
 
         if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
             Path entryCreated = (Path) event.context();
-            System.out.println("New entry created:" + entryCreated);
+            //System.out.println("New entry created:" + entryCreated);
 
             if (name.equals("events")) {
-                System.out.println("Strana letjelica"+name);
+               // System.out.println("Strana letjelica"+name);
                 MainApplicationController.setInfoText("Worning enemy aircraft");
            }
             if(name.equals("alert")) {
-                System.out.println("sudar"+name);
+               // System.out.println("sudar"+name);
                 MainApplicationController.newCrach();
             }
 
         } else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
             Path entryDeleted = (Path) event.context();
-            System.out.println("Exissting entry deleted:" + entryDeleted);
+           // System.out.println("Exissting entry deleted:" + entryDeleted);
         } else if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
             Path entryModified = (Path) event.context();
-            System.out.println("Existing entry modified:" + entryModified);
+            //System.out.println("Existing entry modified:" + entryModified);
         }
     }
 }

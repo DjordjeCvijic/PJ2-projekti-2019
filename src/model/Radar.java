@@ -10,8 +10,9 @@ public class Radar extends Thread {
     public int intervalForMap;
     private int skyX;
     private int skyY;
-    public static File f;
+    public static File fileMap;
     public static File fileAlert;
+    public static File fileEvents;
     public static List idOfEnemis;
 
     public Radar(Airspace a) {
@@ -27,8 +28,9 @@ public class Radar extends Thread {
             e.printStackTrace();
         }
 
-        f = new File("src" + File.separator + "resources" + File.separator + "map.txt");
+        fileMap = new File("src" + File.separator + "resources" + File.separator + "map.txt");
         fileAlert=new File("src" + File.separator + "alert");
+        fileEvents=new File("src" + File.separator + "events" );
 
         idOfEnemis = new ArrayList<Integer>();
 
@@ -42,16 +44,16 @@ public class Radar extends Thread {
             synchronized (airspace) {
 
                 try {
-                    synchronized (f) {
+                    synchronized (fileMap) {
                         if (!Simulator.isStop() && airspace.isNoFly()) {
                             airspace.notify();
-                            System.out.println("notufy u radatu poslije zabrane leta");
+                            //System.out.println("notufy u radatu poslije zabrane leta");
                             Airspace.setNoFly(false);
 
                         }
 
 
-                        BufferedWriter out = new BufferedWriter(new PrintWriter(f));
+                        BufferedWriter out = new BufferedWriter(new PrintWriter(fileMap));
                         out.write(skyX + "#" + skyY);
                         out.write("\r\n");
                         int numOfMili = 0;
@@ -61,17 +63,19 @@ public class Radar extends Thread {
                                 out.write(airspace.getInfo(i, j));
                                 out.write("\r\n");
                                 if (Simulator.isThisEnemy(airspace.getIdInThisPosition(i, j)) && !idOfEnemis.contains(airspace.getIdInThisPosition(i, j))) {
-                                    idOfEnemis.add(airspace.getIdInThisPosition(i, j));
-                                    try {
-                                        BufferedWriter out1 = new BufferedWriter(new PrintWriter(
-                                                "src" + File.separator + "events" + File.separator + Long.toString(System.currentTimeMillis()) + ".txt"));
-                                        out1.write(airspace.getInfo(i, j));
-                                        out1.close();
-                                        airspace.addIdsOfEnemisAircraft(airspace.getIdInThisPosition(i, j));
-                                        System.out.println("notify za stranu letjelicu u radaru");
-                                        airspace.notify();//ide u simulator
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                    synchronized (fileEvents) {
+                                        idOfEnemis.add(airspace.getIdInThisPosition(i, j));
+                                        try {
+                                            BufferedWriter out1 = new BufferedWriter(new PrintWriter(
+                                                    fileEvents + File.separator + Long.toString(System.currentTimeMillis()) + ".txt"));
+                                            out1.write(airspace.getInfo(i, j));
+                                            out1.close();
+                                            airspace.addIdsOfEnemisAircraft(airspace.getIdInThisPosition(i, j));
+                                            //System.out.println("notify za stranu letjelicu u radaru");
+                                            airspace.notify();//ide u simulator
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     }
 
 

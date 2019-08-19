@@ -56,7 +56,7 @@ public class Simulator extends Thread {
 
                 if (stop && airspace.getNumberOfEnemisAircraft()==0 ) {
                     try {
-                        System.out.println("wait u simulatoru");
+                        //System.out.println("wait u simulatoru");
                         airspace.wait();
 
                     } catch (Exception e) {
@@ -241,6 +241,7 @@ public class Simulator extends Thread {
             aircrafts.put(newAircraftForAttack1.getIdOfAircraft(), newAircraftForAttack1);
             airspace.addObjectOnSky(newAircraftForAttack1.getMark(), newAircraftForAttack1.getXPosition(), newAircraftForAttack1.getYPosition(), newAircraftForAttack1.getIdOfAircraft());
             newAircraftForAttack1.start();
+            System.out.println("id od lovaca: "+newAircraftForAttack.getIdOfAircraft()+ " i "+newAircraftForAttack1.getIdOfAircraft());
         } else {
             Rocket objectToAttack = (Rocket) rockets.get(idOfEnemy);
 

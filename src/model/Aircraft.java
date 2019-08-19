@@ -195,10 +195,11 @@ public class Aircraft extends Thread {
 
         int c = 0;
         do {
-            if (isEnemy() && airspace.check(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight)) {
-                c = -1;
+            //if (isEnemy() && airspace.check(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight)) {
+               // c = -1;
 
-            } else if (canFly) {
+            //} else
+            if (canFly) {
                 try {
                     sleep(flightSpeed * 1000);
 
@@ -251,7 +252,7 @@ public class Aircraft extends Thread {
                 }
 
             }
-            //System.out.println("kraj rana letjelice pozzicije i ideks"+xPosition+" "+yPosition+" "+c);
+            System.out.println("index: "+id+" pozicije "+xPosition+" "+yPosition);
 
         } while (c != -1);
         airspace.remuveIdsOfAircraftInAccidents(id);

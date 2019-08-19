@@ -1,5 +1,6 @@
 package controller;
 
+import applications.SystemCopy;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,9 @@ public class StartController {
         s.start();
         Radar r = new Radar(a);
         r.start();
+        SystemCopy sc=new SystemCopy();
+        sc.start();
+
         try {
             Parent root = FXMLLoader.load(getClass().getResource(".." + File.separator + "view" + File.separator + "mainApplication.fxml"));
             Main.primaryStage1.setTitle("Air space");

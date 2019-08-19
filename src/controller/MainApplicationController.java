@@ -43,7 +43,7 @@ public class MainApplicationController extends Thread implements Initializable {
     private Label infoLabel = new Label();
     private GridPane table;
 
-    private File file;
+    private File fileMap;
     private int x;
     private int y;
     private String[][] map;
@@ -56,12 +56,17 @@ public class MainApplicationController extends Thread implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        file = Radar.f;
+        fileMap = Radar.fileMap;
+        fileAlert = Radar.fileAlert;
+        deleteFolders(fileAlert);
+        deleteFolders(new File("src" + File.separator + "events"));
+
+
         try {
 
             sleep(500);
 
-            BufferedReader in = new BufferedReader(new FileReader(file));
+            BufferedReader in = new BufferedReader(new FileReader(fileMap));
             String[] tmp = in.readLine().split("#");
             x = Integer.parseInt(tmp[0]);
             y = Integer.parseInt(tmp[1]);
@@ -86,8 +91,16 @@ public class MainApplicationController extends Thread implements Initializable {
         listener1.start();
         start();
 
-        fileAlert = Radar.fileAlert;
 
+
+    }
+
+    private void deleteFolders(File file) {
+        String[]entries = file.list();
+        for(String s: entries){
+            File currentFile = new File(file.getPath(),s);
+            currentFile.delete();
+        }
     }
 
     public static void newCrach() {
@@ -132,7 +145,7 @@ public class MainApplicationController extends Thread implements Initializable {
     public void run() {
 
 
-        timeStamp = file.lastModified();
+        timeStamp = fileMap.lastModified();
         while (true) {
             if (!Airspace.isIsEnemyInSky()) {
                 infoText = " ";
@@ -145,12 +158,12 @@ public class MainApplicationController extends Thread implements Initializable {
             });
 
             try {
-                if (isFileUpdated(file)) {
+                if (isFileUpdated(fileMap)) {
 
 
-                    synchronized (file) {
+                    synchronized (fileMap) {
 
-                        BufferedReader in = new BufferedReader(new FileReader(file));
+                        BufferedReader in = new BufferedReader(new FileReader(fileMap));
                         in.readLine();
                         String tmp[];
                         map = new String[x][y];//punjenjje pame provjeriti
@@ -167,7 +180,7 @@ public class MainApplicationController extends Thread implements Initializable {
                                 print();
                             }
                         });
-                        timeStamp = file.lastModified();
+                        timeStamp = fileMap.lastModified();
 
                     }
                 }
@@ -238,13 +251,13 @@ public class MainApplicationController extends Thread implements Initializable {
     public void noFlightZoneActivateBtnClick(ActionEvent actionEvent) {
 
 
-        System.out.println("STOP");
+        //System.out.println("STOP");
         noFlightZoneLabel.setText("No-Flight Zone");
         Simulator.noFlightZoneActivate();
     }
 
     public void noFlightZoneDeactivateBtnClick(ActionEvent actionEvent) {
-        System.out.println("STart");
+       // System.out.println("STart");
         noFlightZoneLabel.setText("");
         Simulator.noFlightZoneDeactivate();
     }

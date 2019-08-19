@@ -28,7 +28,7 @@ public class AccidentsStageController implements Initializable{
     @FXML
     private TableColumn<AircraftsInCrush,Date > timeColumn=new TableColumn<>();
 
-    public static ObservableList<AircraftsInCrush> aircraftsInCrushes = FXCollections.observableArrayList();
+    public  ObservableList<AircraftsInCrush> aircraftsInCrushes = FXCollections.observableArrayList();
 
     public void initialize(URL location, ResourceBundle resources){
         File f=new File("src" + File.separator + "alert");
