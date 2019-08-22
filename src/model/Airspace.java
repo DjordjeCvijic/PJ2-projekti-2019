@@ -1,6 +1,8 @@
 package model;
 
 
+import applications.Simulator;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 

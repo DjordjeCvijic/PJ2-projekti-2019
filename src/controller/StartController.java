@@ -8,9 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import main.Main;
-import model.Simulator;
+import applications.*;
 import model.Airspace;
-import model.Radar;
+
 
 import java.io.File;
 

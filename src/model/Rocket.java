@@ -42,7 +42,7 @@ public class Rocket extends Thread {
         return id;
     }
 
-    void setEntrance(int skyX, int skyY) {
+    public void setEntrance(int skyX, int skyY) {
         Random random = new Random();
         flightIndex = random.nextInt(4);
         if (flightIndex == 0) {

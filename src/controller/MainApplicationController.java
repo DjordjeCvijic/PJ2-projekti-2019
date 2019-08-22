@@ -22,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
+import applications.*;
 import java.io.*;
 import java.net.URL;
 
@@ -42,7 +42,8 @@ public class MainApplicationController extends Thread implements Initializable {
     @FXML
     private Label infoLabel = new Label();
     private GridPane table;
-
+    @FXML
+    private ScrollPane scrollPane=new ScrollPane();
     private File fileMap;
     private int x;
     private int y;
@@ -54,7 +55,6 @@ public class MainApplicationController extends Thread implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
 
         fileMap = Radar.fileMap;
         fileAlert = Radar.fileAlert;
@@ -72,10 +72,17 @@ public class MainApplicationController extends Thread implements Initializable {
             y = Integer.parseInt(tmp[1]);
             //System.out.println("u kontoleru velicina table"+x+" "+y);
 
-            Platform.runLater(new Runnable() {
+           /*Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     aPanel.getChildren().add(setTable("   ", x, y));
+                }
+            });*/
+           //setTable("   ", x, y);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    setTable("   ", x, y);
                 }
             });
 
@@ -201,13 +208,13 @@ public class MainApplicationController extends Thread implements Initializable {
                 TextField text1 = new TextField(map[i][j]);
                 Node node = getNode(table, j, i);
                 table.getChildren().remove(node);
-                text1.setPrefWidth(29);
-                text1.setPrefHeight(29);
+                text1.setPrefWidth(33);
+                text1.setPrefHeight(31);
                 if (Simulator.isThisEnemy(Airspace.getIdInThisPositionStatic(i, j))) {
                     text1.setStyle("-fx-text-inner-color: red;");
 
                 }
-                text1.setFont(new Font(10));
+                text1.setFont(new Font(9));
                 table.add(text1, j, i);//prvo colona pa red
                 //GridPane.setValignment(text, VPos.CENTER);
                 //GridPane.setHalignment(text, HPos.CENTER);
@@ -227,23 +234,20 @@ public class MainApplicationController extends Thread implements Initializable {
 
                 Text text = new Text(str);
                 TextField text1 = new TextField(str);
-                text1.setPrefWidth(29);
-                text1.setPrefHeight(29);
+                text1.setPrefWidth(33);
+                text1.setPrefHeight(31);
 
                 table.add(text1, j, i);
                 GridPane.setValignment(text, VPos.CENTER);
                 GridPane.setHalignment(text, HPos.CENTER);
             }
         }
-        //table.setAlignment(Pos.CENTER);
 
-        //table.setGridLinesVisible(true);
-        //table.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        //  table.setMaxSize(4,4);
         table.setLayoutX(20);
         table.setLayoutY(20);
-        //table.setPrefSize(505, 505);
-        // table.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        //scrollPane.setStyle("-fx-background-color:gray ;");
+        scrollPane.setContent(table);
+
         return table;
 
     }
