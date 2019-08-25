@@ -124,17 +124,16 @@ public class Airspace extends Thread {
     }
 
     public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
-        if(id<600) {
+        if (id < 600) {
             Aircraft a = (Aircraft) Simulator.aircrafts.get(id);
-            if ( a.isEnemy() && check(xPosition, yPosition, flightIndex, mark, id, height)) return -1;
-        }else{
-            Rocket a=(Rocket)Simulator.rockets.get(id);
-            if ( a.isEnemy() && check(xPosition, yPosition, flightIndex, mark, id, height)) return -1;
+            if (a.isEnemy() && check(xPosition, yPosition, flightIndex, mark, id, height)) return -1;
+        } else {
+            Rocket a = (Rocket) Simulator.rockets.get(id);
+            if (a.isEnemy() && check(xPosition, yPosition, flightIndex, mark, id, height)) return -1;
 
         }
 
         if (idsOfAircraftInAccidents.contains(id)) return -1;
-
 
 
         int f = flightIndex;
@@ -465,11 +464,12 @@ public class Airspace extends Thread {
                 return true;
 
             } else {
-                if (yPosition == skyY-1 && xPosition != 0) //lijevo  polje,uzima iza sebe
+                if (yPosition == skyY - 1 && xPosition != 0) //lijevo  polje,uzima iza sebe
                     a = (Aircraft) Simulator.aircrafts.get(fields[xPosition - 1][yPosition].getId());
-                else if (yPosition !=skyY-1) {
+                else if (yPosition != skyY - 1) {
                     a = (Aircraft) Simulator.aircrafts.get(fields[xPosition][yPosition + 1].getId());//negdje u polju
-                }                if (a != null && id == a.getIdToAttack()) {
+                }
+                if (a != null && id == a.getIdToAttack()) {
                     if (fields[xPosition][yPosition].isSecondAircraft()) {//za dve letjelice na istom polju
 
 

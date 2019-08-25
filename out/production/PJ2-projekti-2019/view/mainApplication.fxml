@@ -36,6 +36,6 @@
       </Label>
       <Label fx:id="noFlightZoneLabel" alignment="CENTER" layoutX="436.0" layoutY="136.0" prefHeight="22.0" prefWidth="234.0" textAlignment="CENTER" />
       <Label fx:id="infoLabel" layoutX="347.0" layoutY="406.0" prefHeight="21.0" prefWidth="142.0" />
-      <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="279.0" prefWidth="334.0" style="-fx-background-color: gray;" />
+      <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="279.0" prefWidth="334.0" />
    </children>
 </AnchorPane>

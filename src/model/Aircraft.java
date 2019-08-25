@@ -1,10 +1,13 @@
 package model;
 
+import applications.LoggerService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 
 
 public class Aircraft extends Thread {
@@ -204,7 +207,8 @@ public class Aircraft extends Thread {
                     sleep(flightSpeed * 1000);
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LoggerService logger=LoggerService.getInstance();
+                    logger.log(Level.WARNING,e);
                 }
                 // System.out.println("u ranu letjelice pozicije"+xPosition+" "+yPosition);
 
@@ -231,7 +235,8 @@ public class Aircraft extends Thread {
                     sleep(flightSpeed * 1000);//mozda ne treba
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LoggerService logger=LoggerService.getInstance();
+                    logger.log(Level.WARNING,e);
                 }
                 flightIndex = modFlightIndex(flightIndex);//indesk za skretanje
                 // System.out.println(flightIndex);

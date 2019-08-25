@@ -1,5 +1,6 @@
 package controller;
 
+import applications.LoggerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 public class AccidentsStageController implements Initializable{
     @FXML
@@ -47,7 +49,8 @@ public class AccidentsStageController implements Initializable{
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
 
         firstAircraftColumn.setCellValueFactory(new PropertyValueFactory<>("firstAircraft"));

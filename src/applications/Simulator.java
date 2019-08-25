@@ -4,6 +4,7 @@ import model.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
 
 public class Simulator extends Thread {
     public int timeInterval;
@@ -35,7 +36,8 @@ public class Simulator extends Thread {
             timeInterval = Integer.parseInt(tmp[0]);
             in.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger = LoggerService.getInstance();
+            logger.log(Level.WARNING, e);
         }
         a.setAirspace(skyX, skyY);
         airspace = a;
@@ -56,19 +58,20 @@ public class Simulator extends Thread {
         while (true) {
             synchronized (airspace) {
 
-                if (stop && airspace.getNumberOfEnemisAircraft()==0 ) {
+                if (stop && airspace.getNumberOfEnemisAircraft() == 0) {
                     try {
                         //System.out.println("wait u simulatoru");
                         airspace.wait();
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LoggerService logger = LoggerService.getInstance();
+                        logger.log(Level.WARNING, e);
                     }
                 }
 
                 Integer idOfEnemy = airspace.getIdsOfEnemisAircraft();
                 if (idOfEnemy != 0) {
-                    System.out.println("id neprijatelja: "+idOfEnemy);
+                    System.out.println("id neprijatelja: " + idOfEnemy);
                     sendMilitaryAircraft(idOfEnemy);
 
                 }
@@ -124,7 +127,8 @@ public class Simulator extends Thread {
                         timeStamp = f.lastModified();
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LoggerService logger = LoggerService.getInstance();
+                        logger.log(Level.WARNING, e);
                     }
                 } else {
 
@@ -209,7 +213,8 @@ public class Simulator extends Thread {
                     airspace.wait(timeInterval * 1000);
                     //sleep(timeInterval * 1000);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LoggerService logger = LoggerService.getInstance();
+                    logger.log(Level.WARNING, e);
                 }
             }
 
@@ -243,7 +248,7 @@ public class Simulator extends Thread {
             aircrafts.put(newAircraftForAttack1.getIdOfAircraft(), newAircraftForAttack1);
             airspace.addObjectOnSky(newAircraftForAttack1.getMark(), newAircraftForAttack1.getXPosition(), newAircraftForAttack1.getYPosition(), newAircraftForAttack1.getIdOfAircraft());
             newAircraftForAttack1.start();
-            System.out.println("id od lovaca: "+newAircraftForAttack.getIdOfAircraft()+ " i "+newAircraftForAttack1.getIdOfAircraft());
+            System.out.println("id od lovaca: " + newAircraftForAttack.getIdOfAircraft() + " i " + newAircraftForAttack1.getIdOfAircraft());
         } else {
             Rocket objectToAttack = (Rocket) rockets.get(idOfEnemy);
 

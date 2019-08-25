@@ -7,7 +7,7 @@ public class MilitaryRocket extends Rocket {
 
         super(range, height, "MiR", a);
         inland = i;
-        if(!inland) {
+        if (!inland) {
             System.out.println("u raketi jeste strani");
             setEnemy(true);
         }

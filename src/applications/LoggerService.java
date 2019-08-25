@@ -8,22 +8,38 @@ import java.util.logging.SimpleFormatter;
 
 public class LoggerService {
     private static LoggerService loggerServiceInstance = null;
+    public static  Logger myLogger=null;
+
+    public static LoggerService getInstance()
+    {
+        if (loggerServiceInstance == null)
+            loggerServiceInstance = new LoggerService();
+
+        return loggerServiceInstance;
+    }
+
+
     private LoggerService(){
-        Logger logger = Logger.getLogger("MyLog");
+        myLogger = Logger.getLogger("MyLogger");
         FileHandler fh;
 
         try {
-            fh = new FileHandler("resources" + File.separator + "LoggerService.log");
-            logger.addHandler(fh);
+            fh = new FileHandler("src"+File.separator+"resources"+File.separator+"LoggerFile.log",true);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
+            myLogger.addHandler(fh);
 
-            throw new Exception();
+
         } catch (Exception e) {
-            logger.log(Level.WARNING,e.toString());
+            myLogger.log(Level.WARNING,e.toString());
+
         }
 
-        logger.info("Hi How r u?");
+
+
+    }
+    public static void log(Level level, Exception ex) {
+        myLogger.log(level, ex.toString(),ex);
 
     }
 }

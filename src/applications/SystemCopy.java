@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -71,8 +72,8 @@ public class SystemCopy extends Thread {
                 sleep(59000);
 
             } catch (Exception e) {
-                e.printStackTrace();
-            }
+                LoggerService logger=LoggerService.getInstance();
+                logger.log(Level.WARNING,e);            }
         }
 
     }

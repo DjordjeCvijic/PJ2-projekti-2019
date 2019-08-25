@@ -1,6 +1,7 @@
 package controller;
 
 
+import applications.LoggerService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,6 +13,8 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -51,8 +54,9 @@ public class EnemyAircraftStageController implements Initializable{
                 out.close();
             }
 
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e){
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));

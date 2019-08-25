@@ -13,6 +13,7 @@ import model.Airspace;
 
 
 import java.io.File;
+import java.util.logging.Level;
 
 public class StartController {
 
@@ -27,7 +28,7 @@ public class StartController {
         s.start();
         Radar r = new Radar(a);
         r.start();
-        SystemCopy sc=new SystemCopy();
+        SystemCopy sc = new SystemCopy();
         sc.start();
 
         try {
@@ -36,7 +37,8 @@ public class StartController {
             Main.primaryStage1.setScene(new Scene(root));
             Main.primaryStage1.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
 
 

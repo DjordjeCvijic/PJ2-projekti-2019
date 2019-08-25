@@ -1,5 +1,6 @@
 package model;
 
+import applications.LoggerService;
 import controller.MainApplicationController;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.logging.Level;
 
 public class JavaDirectoryChangeListener extends Thread {
 
@@ -49,11 +51,13 @@ public class JavaDirectoryChangeListener extends Thread {
                 }
             }
 
-        } catch (InterruptedException interruptedException) {
-            System.out.println("Thread got interrupted:" + interruptedException);
+        } catch (InterruptedException e) {
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
             return;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
             return;
         }
 

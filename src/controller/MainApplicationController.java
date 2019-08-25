@@ -28,6 +28,7 @@ import java.net.URL;
 
 import java.nio.file.FileSystems;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import model.*;
 
@@ -64,6 +65,7 @@ public class MainApplicationController extends Thread implements Initializable {
 
         try {
 
+
             sleep(500);
 
             BufferedReader in = new BufferedReader(new FileReader(fileMap));
@@ -72,13 +74,7 @@ public class MainApplicationController extends Thread implements Initializable {
             y = Integer.parseInt(tmp[1]);
             //System.out.println("u kontoleru velicina table"+x+" "+y);
 
-           /*Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    aPanel.getChildren().add(setTable("   ", x, y));
-                }
-            });*/
-           //setTable("   ", x, y);
+
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -86,10 +82,11 @@ public class MainApplicationController extends Thread implements Initializable {
                 }
             });
 
-
             in.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
         //file=new File("src" + File.separator + "resources" + File.separator + "map.txt");
         JavaDirectoryChangeListener listener = new JavaDirectoryChangeListener(FileSystems.getDefault().getPath("src" + File.separator + "events"), "events");
@@ -123,7 +120,8 @@ public class MainApplicationController extends Thread implements Initializable {
                 warning(crash.toString());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerService logger=LoggerService.getInstance();
+                logger.log(Level.WARNING,e);
             }
         }
     }
@@ -192,7 +190,8 @@ public class MainApplicationController extends Thread implements Initializable {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerService logger=LoggerService.getInstance();
+                logger.log(Level.WARNING,e);
             }
 
         }
@@ -225,7 +224,7 @@ public class MainApplicationController extends Thread implements Initializable {
     }
 
 
-    public GridPane setTable(String str, int x, int y) {
+    public GridPane setTable(String str, int x, int y){
         table = new GridPane();
 
         for (int i = 0; i < x; i++) {
@@ -274,7 +273,8 @@ public class MainApplicationController extends Thread implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
     }
 
@@ -287,7 +287,8 @@ public class MainApplicationController extends Thread implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
     }
 

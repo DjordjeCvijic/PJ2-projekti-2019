@@ -9,7 +9,7 @@ public class MilitaryBomberAirplane extends Aircraft {
     public MilitaryBomberAirplane(String model, double height, Map characteristics, List persons, boolean inland, Airspace a) {
         super(model, height, characteristics, persons, "MBA", a);
         this.inland = inland;
-        if(!inland) {
+        if (!inland) {
             System.out.println("strana letjelica");
             setEnemy(true);
         }

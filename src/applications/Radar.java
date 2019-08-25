@@ -8,6 +8,7 @@ import model.Rocket;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class Radar extends Thread {
 
@@ -30,7 +31,8 @@ public class Radar extends Thread {
             in.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerService logger=LoggerService.getInstance();
+            logger.log(Level.WARNING,e);
         }
 
         fileMap = new File("src" + File.separator + "resources" + File.separator + "map.txt");
@@ -79,7 +81,8 @@ public class Radar extends Thread {
                                             //System.out.println("notify za stranu letjelicu u radaru");
                                             airspace.notify();//ide u simulator
                                         } catch (Exception e) {
-                                            e.printStackTrace();
+                                            LoggerService logger=LoggerService.getInstance();
+                                            logger.log(Level.WARNING,e);
                                         }
                                     }
 
@@ -101,7 +104,8 @@ public class Radar extends Thread {
 
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LoggerService logger=LoggerService.getInstance();
+                    logger.log(Level.WARNING,e);
                 }
 
 
@@ -113,7 +117,8 @@ public class Radar extends Thread {
 
                 sleep(intervalForMap * 1000);
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerService logger=LoggerService.getInstance();
+                logger.log(Level.WARNING,e);
             }
 
 
@@ -159,7 +164,8 @@ public class Radar extends Thread {
                 oos.writeObject(c);
                 System.out.println(c.toString());
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerService logger=LoggerService.getInstance();
+                logger.log(Level.WARNING,e);
             }
 
 
