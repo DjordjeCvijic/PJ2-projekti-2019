@@ -1,11 +1,13 @@
 package model;
 
+import applications.Simulator;
+
 import java.util.Random;
 
 public class Rocket extends Thread {
 
     private double range;
-    private double heightOfTheFlight;
+    private int heightOfTheFlight;
     private int flightSpeed;
     private String mark;
     private int id;
@@ -24,7 +26,7 @@ public class Rocket extends Thread {
         return flightIndex;
     }
 
-    public Rocket(double range, double height, String mark, Airspace a) {
+    public Rocket(double range, int height, String mark, Airspace a) {
         this.range = range;
         heightOfTheFlight = height;
         this.mark = mark;
@@ -121,10 +123,13 @@ public class Rocket extends Thread {
                 }
 
             }
+            System.out.println("index: "+id+" pozicije "+xPosition+" "+yPosition);
 
         } while (c != -1);
+        airspace.remuveIdsOfAircraftInAccidents(id);
         if (enemy) {
             Airspace.decramentEnemiesInSky();
+            Simulator.noFlightZoneDeactivate();
         }
     }
 
@@ -192,5 +197,9 @@ public class Rocket extends Thread {
 
     public double getHeightOfTheFlight() {
         return heightOfTheFlight;
+    }
+
+    public void setFlightSpeed(int flightSpeed) {
+        this.flightSpeed = flightSpeed;
     }
 }

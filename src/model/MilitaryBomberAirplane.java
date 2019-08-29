@@ -6,7 +6,7 @@ import java.util.Map;
 public class MilitaryBomberAirplane extends Aircraft {
     private boolean inland;
 
-    public MilitaryBomberAirplane(String model, double height, Map characteristics, List persons, boolean inland, Airspace a) {
+    public MilitaryBomberAirplane(String model, int height, Map characteristics, List persons, boolean inland, Airspace a) {
         super(model, height, characteristics, persons, "MBA", a);
         this.inland = inland;
         if (!inland) {

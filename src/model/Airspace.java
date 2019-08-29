@@ -41,7 +41,9 @@ public class Airspace extends Thread {
         return i;
     }
 
-    public Integer[] getIdsOfAircraftToEleminate() {
+    public synchronized Integer[] getIdsOfAircraftToEleminate() {
+        System.out.println("Size:" + idsOfAircraftToEleminate.size());
+        System.out.println("nizu airspace: " + idsOfAircraftToEleminate.toString());
         Integer[] arr = new Integer[idsOfAircraftToEleminate.size()];
         arr = idsOfAircraftToEleminate.toArray(arr);
         return arr;
@@ -58,10 +60,16 @@ public class Airspace extends Thread {
         numberOfAircraftInAccidents = 0;
     }
 
-    public synchronized void addIdsOfAircraftInAccidents(int i) {
-        idsOfAircraftInAccidents.add(i);
-        idsOfAircraftToEleminate.add(i);
-        numberOfAircraftInAccidents++;
+    public synchronized void addIdsOfAircraftInAccidents(int i, int j) {
+        synchronized (this) {
+            System.out.println("ubaceni ids:" + i + " " + j);
+
+            idsOfAircraftInAccidents.add(i);
+            idsOfAircraftToEleminate.add(i);
+            idsOfAircraftInAccidents.add(j);
+            idsOfAircraftToEleminate.add(j);
+            numberOfAircraftInAccidents+=2;
+        }
 
     }
 
@@ -123,7 +131,7 @@ public class Airspace extends Thread {
         return (fields[i][j].getId() + "#" + fields[i][j].getAircraftMark() + "#" + i + "#" + j);
     }
 
-    public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id, double height) {
+    public synchronized int flight(int xPosition, int yPosition, int flightIndex, String mark, int id, int height) {
         if (id < 600) {
             Aircraft a = (Aircraft) Simulator.aircrafts.get(id);
             if (a.isEnemy() && check(xPosition, yPosition, flightIndex, mark, id, height)) return -1;
@@ -224,13 +232,13 @@ public class Airspace extends Thread {
             fields[xPosition][yPosition].setSecondAircraft(false);
             fields[xPosition][yPosition].setSecondId(0);
             fields[xPosition][yPosition].setSecondMar("   ");
-            fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+            fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
         } else if (yPosition != skyY && xPosition != skyX && yPosition != -1 && xPosition != -1) {
             fields[xPosition][yPosition].setId(0);
             fields[xPosition][yPosition].setAircraftMark("   ");
-            fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+            fields[xPosition][yPosition].setHeightOfTheFlight(0);
         }
         //System.out.println("u letu pozocije poslije pomicaja i ideks"+ xPosition+" "+yPosition+" "+flightIndex);
         return f;
@@ -258,13 +266,13 @@ public class Airspace extends Thread {
                     fields[xPosition][yPosition].setSecondAircraft(false);
                     fields[xPosition][yPosition].setSecondId(0);
                     fields[xPosition][yPosition].setSecondMar("   ");
-                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                 } else {
                     fields[xPosition][yPosition].setId(0);
                     fields[xPosition][yPosition].setAircraftMark("   ");
-                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 }
                 return true;
 
@@ -288,13 +296,13 @@ public class Airspace extends Thread {
                         fields[xPosition][yPosition].setSecondAircraft(false);
                         fields[xPosition][yPosition].setSecondId(0);
                         fields[xPosition][yPosition].setSecondMar("   ");
-                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                     } else {
                         fields[xPosition][yPosition].setId(0);
                         fields[xPosition][yPosition].setAircraftMark("   ");
-                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0);
                     }
                     return true;
 
@@ -323,13 +331,13 @@ public class Airspace extends Thread {
                     fields[xPosition][yPosition].setSecondAircraft(false);
                     fields[xPosition][yPosition].setSecondId(0);
                     fields[xPosition][yPosition].setSecondMar("   ");
-                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                 } else {
                     fields[xPosition][yPosition].setId(0);
                     fields[xPosition][yPosition].setAircraftMark("   ");
-                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 }
                 return true;
 
@@ -353,13 +361,13 @@ public class Airspace extends Thread {
                         fields[xPosition][yPosition].setSecondAircraft(false);
                         fields[xPosition][yPosition].setSecondId(0);
                         fields[xPosition][yPosition].setSecondMar("   ");
-                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                     } else {
                         fields[xPosition][yPosition].setId(0);
                         fields[xPosition][yPosition].setAircraftMark("   ");
-                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0);
                     }
                     return true;
 
@@ -388,13 +396,13 @@ public class Airspace extends Thread {
                     fields[xPosition][yPosition].setSecondAircraft(false);
                     fields[xPosition][yPosition].setSecondId(0);
                     fields[xPosition][yPosition].setSecondMar("   ");
-                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                 } else {
                     fields[xPosition][yPosition].setId(0);
                     fields[xPosition][yPosition].setAircraftMark("   ");
-                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 }
                 return true;
 
@@ -418,13 +426,13 @@ public class Airspace extends Thread {
                         fields[xPosition][yPosition].setSecondAircraft(false);
                         fields[xPosition][yPosition].setSecondId(0);
                         fields[xPosition][yPosition].setSecondMar("   ");
-                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                     } else {
                         fields[xPosition][yPosition].setId(0);
                         fields[xPosition][yPosition].setAircraftMark("   ");
-                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0);
                     }
                     return true;
 
@@ -453,13 +461,13 @@ public class Airspace extends Thread {
                     fields[xPosition][yPosition].setSecondAircraft(false);
                     fields[xPosition][yPosition].setSecondId(0);
                     fields[xPosition][yPosition].setSecondMar("   ");
-                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                 } else {
                     fields[xPosition][yPosition].setId(0);
                     fields[xPosition][yPosition].setAircraftMark("   ");
-                    fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                    fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 }
                 return true;
 
@@ -483,13 +491,13 @@ public class Airspace extends Thread {
                         fields[xPosition][yPosition].setSecondAircraft(false);
                         fields[xPosition][yPosition].setSecondId(0);
                         fields[xPosition][yPosition].setSecondMar("   ");
-                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setSecondHeightOfTheFlight(0);
 
 
                     } else {
                         fields[xPosition][yPosition].setId(0);
                         fields[xPosition][yPosition].setAircraftMark("   ");
-                        fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                        fields[xPosition][yPosition].setHeightOfTheFlight(0);
                     }
                     return true;
 
@@ -502,32 +510,34 @@ public class Airspace extends Thread {
         return false;
     }
 
-    private synchronized boolean crash(int xPosition, int yPosition, int flightIndex, String mark, int id,
-                                       double height) {
+    private synchronized boolean crash(int xPosition, int yPosition, int flightIndex, String mark, int id, int height) {
+        System.out.println("ideks " + flightIndex);
 
         if (flightIndex == 0) {
             if (height == fields[xPosition][yPosition - 1].getHeightOfTheFlight()) {
-                addIdsOfAircraftInAccidents(id);
-                addIdsOfAircraftInAccidents(fields[xPosition][yPosition - 1].getId());
+                addIdsOfAircraftInAccidents(id,fields[xPosition][yPosition - 1].getId());
+               // addIdsOfAircraftInAccidents(fields[xPosition][yPosition - 1].getId());
+                System.out.println("0 u crash" + id + "   " + fields[xPosition][yPosition - 1].getId());
                 fields[xPosition][yPosition].setId(0);
                 fields[xPosition][yPosition].setAircraftMark("   ");
-                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 fields[xPosition][yPosition - 1].setId(0);
                 fields[xPosition][yPosition - 1].setAircraftMark("   ");
-                fields[xPosition][yPosition - 1].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition - 1].setHeightOfTheFlight(0);
                 return true;
             }
             return false;
         } else if (flightIndex == 1) {
             if (height == fields[xPosition - 1][yPosition].getHeightOfTheFlight()) {
-                addIdsOfAircraftInAccidents(id);
-                addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                addIdsOfAircraftInAccidents(id, fields[xPosition - 1][yPosition].getId());
+                //addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                System.out.println("1 u crash" + id + "   " + fields[xPosition-1][yPosition].getId());
                 fields[xPosition][yPosition].setId(0);
                 fields[xPosition][yPosition].setAircraftMark("   ");
-                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 fields[xPosition - 1][yPosition].setId(0);
                 fields[xPosition - 1][yPosition].setAircraftMark("   ");
-                fields[xPosition - 1][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition - 1][yPosition].setHeightOfTheFlight(0);
                 return true;
 
             }
@@ -535,14 +545,15 @@ public class Airspace extends Thread {
         } else if (flightIndex == 2) {
 
             if (height == fields[xPosition][yPosition + 1].getHeightOfTheFlight()) {
-                addIdsOfAircraftInAccidents(id);
-                addIdsOfAircraftInAccidents(fields[xPosition][yPosition + 1].getId());
+                addIdsOfAircraftInAccidents(id,fields[xPosition][yPosition + 1].getId());
+                //addIdsOfAircraftInAccidents(fields[xPosition][yPosition + 1].getId());
+                System.out.println("2 u crash" + id + "   " + fields[xPosition][yPosition +1].getId());
                 fields[xPosition][yPosition].setId(0);
                 fields[xPosition][yPosition].setAircraftMark("   ");
-                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 fields[xPosition][yPosition + 1].setId(0);
                 fields[xPosition][yPosition + 1].setAircraftMark("   ");
-                fields[xPosition][yPosition + 1].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition + 1].setHeightOfTheFlight(0);
                 return true;
             }
             return false;
@@ -550,14 +561,15 @@ public class Airspace extends Thread {
 
 
             if (height == fields[xPosition + 1][yPosition].getHeightOfTheFlight()) {
-                addIdsOfAircraftInAccidents(id);
-                addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                addIdsOfAircraftInAccidents(id,fields[xPosition+1][yPosition ].getId());
+                //addIdsOfAircraftInAccidents(fields[xPosition - 1][yPosition].getId());
+                System.out.println("3 u crash" + id + "   " + fields[xPosition+1][yPosition ].getId());
                 fields[xPosition][yPosition].setId(0);
                 fields[xPosition][yPosition].setAircraftMark("   ");
-                fields[xPosition][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition][yPosition].setHeightOfTheFlight(0);
                 fields[xPosition + 1][yPosition].setId(0);
                 fields[xPosition + 1][yPosition].setAircraftMark("   ");
-                fields[xPosition + 1][yPosition].setHeightOfTheFlight(0.0);
+                fields[xPosition + 1][yPosition].setHeightOfTheFlight(0);
                 return true;
             }
             return false;
@@ -571,9 +583,7 @@ public class Airspace extends Thread {
 
     public static void setNoFly(boolean noFly) {
         Airspace.noFly = noFly;
-        if (!noFly) {
 
-        }
     }
 
     public int getEnemiesInSky() {

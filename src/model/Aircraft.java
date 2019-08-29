@@ -1,6 +1,7 @@
 package model;
 
 import applications.LoggerService;
+import applications.Simulator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.logging.Level;
 public class Aircraft extends Thread {
     private String model;
     private int id;
-    private double heightOfTheFlight;
+    private int heightOfTheFlight;
     private int flightSpeed;
     private Map characteristics;
     private List persons;
@@ -35,14 +36,15 @@ public class Aircraft extends Thread {
     }
 
 
+
     public Aircraft() {
     }
 
-    public double getHeightOfTheFlight() {
+    public int getHeightOfTheFlight() {
         return heightOfTheFlight;
     }
 
-    public Aircraft(String model, double height, Map characteristics, List persons, String mark, Airspace a) {
+    public Aircraft(String model, int height, Map characteristics, List persons, String mark, Airspace a) {
         this.model = model;
         id = ++counter;
         heightOfTheFlight = height;
@@ -264,6 +266,7 @@ public class Aircraft extends Thread {
         System.out.println("izasao " + id);
         if (enemy) {
             Airspace.decramentEnemiesInSky();
+            Simulator.noFlightZoneDeactivate();
         }
 
 
@@ -346,5 +349,9 @@ public class Aircraft extends Thread {
 
     public void setInAttack(boolean inAttack) {
         this.inAttack = inAttack;
+    }
+
+    public void setFlightSpeed(int flightSpeed) {
+        this.flightSpeed = flightSpeed;
     }
 }

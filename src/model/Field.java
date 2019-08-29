@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Field {
     private String aircraftMark;
     private int id;
-    private Double heightOfTheFlight;
+    private int heightOfTheFlight;
 
     private boolean secondAircraft = false;
     private int secondId;
     private String secondMar;
-    private Double secondHeightOfTheFlight;
+    private int secondHeightOfTheFlight;
 
     public Field(String mark, int id) {
         aircraftMark = mark;
@@ -59,19 +59,19 @@ public class Field {
         this.secondId = secondId;
     }
 
-    public Double getSecondHeightOfTheFlight() {
+    public int getSecondHeightOfTheFlight() {
         return secondHeightOfTheFlight;
     }
 
-    public void setSecondHeightOfTheFlight(Double secondHeightOfTheFlight) {
+    public void setSecondHeightOfTheFlight(int secondHeightOfTheFlight) {
         this.secondHeightOfTheFlight = secondHeightOfTheFlight;
     }
 
-    public Double getHeightOfTheFlight() {
+    public synchronized  int getHeightOfTheFlight() {
         return heightOfTheFlight;
     }
 
-    public void setHeightOfTheFlight(Double heightOfTheFlight) {
+    public void setHeightOfTheFlight(int heightOfTheFlight) {
         this.heightOfTheFlight = heightOfTheFlight;
     }
 

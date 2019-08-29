@@ -6,7 +6,7 @@ import java.util.Map;
 public class FireAirplane extends Aircraft {
     private double waterCapacity;
 
-    public FireAirplane(String model, double height, Map characteristics, List persons, double water, Airspace a) {
+    public FireAirplane(String model, int height, Map characteristics, List persons, double water, Airspace a) {
         super(model, height, characteristics, persons, "FrA", a);
         waterCapacity = water;
     }

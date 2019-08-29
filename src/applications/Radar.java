@@ -1,5 +1,6 @@
 package applications;
 
+import get_properties.GetRadarPropertyValues;
 import model.Aircraft;
 import model.Airspace;
 import model.Crash;
@@ -20,15 +21,17 @@ public class Radar extends Thread {
     public static File fileAlert;
     public static File fileEvents;
     public static List idOfEnemis;
+    private GetRadarPropertyValues properties;
 
     public Radar(Airspace a) {
         airspace = a;
         skyX = a.getSkyX();
         skyY = a.getSkyY();
+        properties=new GetRadarPropertyValues();
         try {
-            BufferedReader in = new BufferedReader(new FileReader("src" + File.separator + "resources" + File.separator + "radar.properties.txt"));
-            intervalForMap = Integer.parseInt(in.readLine());
-            in.close();
+
+            intervalForMap = Integer.parseInt(properties.getPropValue("time_interval_to_scan_sky"));
+
 
         } catch (Exception e) {
             LoggerService logger=LoggerService.getInstance();
@@ -54,7 +57,7 @@ public class Radar extends Thread {
                     synchronized (fileMap) {
                         if (!Simulator.isStop() && airspace.isNoFly()) {
                             airspace.notify();
-                            //System.out.println("notufy u radatu poslije zabrane leta");
+                            System.out.println("notufy u radatu poslije zabrane leta");
                             Airspace.setNoFly(false);
 
                         }
@@ -78,6 +81,7 @@ public class Radar extends Thread {
                                             out1.write(airspace.getInfo(i, j));
                                             out1.close();
                                             airspace.addIdsOfEnemisAircraft(airspace.getIdInThisPosition(i, j));
+
                                             //System.out.println("notify za stranu letjelicu u radaru");
                                             airspace.notify();//ide u simulator
                                         } catch (Exception e) {
@@ -97,7 +101,7 @@ public class Radar extends Thread {
 
                         if (airspace.isIsEnemyInSky() && airspace.getEnemiesInSky() == 0) {
                             airspace.setIsEnemyInSky(false);
-                            Simulator.noFlightZoneDeactivate();
+                            //Simulator.noFlightZoneDeactivate();
 
                         }
 
@@ -109,7 +113,11 @@ public class Radar extends Thread {
                 }
 
 
-                if (airspace.getNumberOfAircraftInAccidents() != 0) crashInAirspace();
+                if (airspace.getNumberOfAircraftInAccidents() != 0){
+                    System.out.println("pozvan crash u radaru");
+                    crashInAirspace();
+
+                }
 
 
             }
@@ -138,6 +146,7 @@ public class Radar extends Thread {
             int second = arr[1];
             airspace.remuveIdsOfAircraftToEleminate(arr[0]);
             airspace.remuveIdsOfAircraftToEleminate(arr[1]);
+            System.out.println(first + " ucesnici "+ second);
             if (first < 600) {
                 aircraft = (Aircraft) Simulator.aircrafts.get(first);
                 description = aircraft.getMark()+"(id:"+aircraft.getIdOfAircraft()+")";

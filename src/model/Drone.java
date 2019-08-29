@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Drone extends Aircraft {
 
-    public Drone(String model, double height, Map characteristics, List persons, Airspace a) {
+    public Drone(String model, int height, Map characteristics, List persons, Airspace a) {
         super(model, height, characteristics, persons, "Drn", a);
     }
 

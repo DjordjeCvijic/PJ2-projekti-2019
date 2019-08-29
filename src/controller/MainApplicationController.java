@@ -213,6 +213,10 @@ public class MainApplicationController extends Thread implements Initializable {
                     text1.setStyle("-fx-text-inner-color: red;");
 
                 }
+                Aircraft a=(Aircraft)Simulator.aircrafts.get(Airspace.getIdInThisPositionStatic(i, j));
+                if(a!=null && a.isInAttack()){
+                    text1.setStyle("-fx-text-inner-color: blue;");
+                }
                 text1.setFont(new Font(9));
                 table.add(text1, j, i);//prvo colona pa red
                 //GridPane.setValignment(text, VPos.CENTER);

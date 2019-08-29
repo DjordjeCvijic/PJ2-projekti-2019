@@ -1,12 +1,12 @@
 package applications;
 
-import applications.Radar;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
-import java.util.List;
+
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -24,7 +24,7 @@ public class SystemCopy extends Thread {
     public void run() {
         while (true) {
             try {
-                sleep(10000);
+                sleep(60000);
 
                 Date date = new Date();
                 System.out.println(date);
@@ -69,7 +69,7 @@ public class SystemCopy extends Thread {
                 }
 
 
-                sleep(59000);
+
 
             } catch (Exception e) {
                 LoggerService logger=LoggerService.getInstance();

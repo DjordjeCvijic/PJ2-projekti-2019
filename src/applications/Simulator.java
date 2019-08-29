@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 
+import get_properties.GetConfigPropertyValues;
+
 public class Simulator extends Thread {
     public int timeInterval;
     private int skyX;
@@ -19,26 +21,23 @@ public class Simulator extends Thread {
     private static boolean stop = false;
     private int numberOfInlandAircrafts;
     private int numberOfEnemiesAircrafts;
+    private GetConfigPropertyValues properties;
 
 
     public Simulator(Airspace a) {
-        try {
-            BufferedReader in = new BufferedReader(new FileReader("src" + File.separator + "resources" + File.separator + "config.properties.txt"));
-            String s = in.readLine();
-            s = in.readLine();
-            String[] tmp = s.split("#");
-            skyX = Integer.parseInt(tmp[0]);
-            skyY = Integer.parseInt(tmp[1]);
 
-            // System.out.println("construktor simulatora,dimenzije:"+skyX+" "+skyY);//mmmmmmmmmmmmmmmmmm
-            s = in.readLine();
-            tmp = s.split("#");
-            timeInterval = Integer.parseInt(tmp[0]);
-            in.close();
-        } catch (Exception e) {
-            LoggerService logger = LoggerService.getInstance();
-            logger.log(Level.WARNING, e);
-        }
+
+        properties = new GetConfigPropertyValues();
+        skyX = Integer.parseInt(properties.getPropValue("sky_width"));
+        System.out.println(skyX);
+        skyY = Integer.parseInt(properties.getPropValue("sky_height"));
+
+
+        // System.out.println("construktor simulatora,dimenzije:"+skyX+" "+skyY);//mmmmmmmmmmmmmmmmmm
+
+        timeInterval = Integer.parseInt(properties.getPropValue("time_interval_to_create_aircraft"));
+
+
         a.setAirspace(skyX, skyY);
         airspace = a;
         aircrafts = new HashMap<Integer, Aircraft>();
@@ -49,18 +48,16 @@ public class Simulator extends Thread {
 
 
     public void run() {
-        File f = new File("src" + File.separator + "resources" + File.separator + "config.properties.txt");
+
         Aircraft newAircraft = null;
         Rocket newRocket = null;
 
-
-        this.timeStamp = f.lastModified();
         while (true) {
             synchronized (airspace) {
 
                 if (stop && airspace.getNumberOfEnemisAircraft() == 0) {
                     try {
-                        //System.out.println("wait u simulatoru");
+                        System.out.println("wait u simulatoru");
                         airspace.wait();
 
                     } catch (Exception e) {
@@ -74,57 +71,30 @@ public class Simulator extends Thread {
                     System.out.println("id neprijatelja: " + idOfEnemy);
                     sendMilitaryAircraft(idOfEnemy);
 
-                }
 
-
-                /*//samo za testiranje sudara:
-                newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), 100, new HashMap<Integer, Object>(), new ArrayList(),
-                        random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
-                newAircraft.setEntrance1(skyX, skyY);
-
-                aircrafts.put(newAircraft.getIdOfAircraft(), newAircraft);
-                airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
-                newAircraft.start();
-
-                Aircraft newAircraft1 = new PessengerAirplane(Integer.toString(random.nextInt(1000)), 100, new HashMap<Integer, Object>(), new ArrayList(),
-                        random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
-                newAircraft1.setEntrance2(skyX, skyY);
-
-                aircrafts.put(newAircraft1.getIdOfAircraft(), newAircraft1);
-                airspace.addObjectOnSky(newAircraft1.getMark(), newAircraft1.getXPosition(), newAircraft1.getYPosition(), newAircraft1.getIdOfAircraft());
-                newAircraft1.start();*/
-
-
-                else if (isFileUpdated(f) || numberOfEnemiesAircrafts > 0 || numberOfInlandAircrafts > 0) {
+                } else if (Integer.parseInt(properties.getPropValue("enemy_aircraft")) > 0 || Integer.parseInt(properties.getPropValue("inland_aircraft")) > 0) {
                     try {
-                        BufferedReader in = new BufferedReader(new FileReader(f));
-                        String s = in.readLine();
-                        String[] tmp = s.split("#");
-                        numberOfEnemiesAircrafts = Integer.parseInt(tmp[0]);
-                        numberOfInlandAircrafts = Integer.parseInt(tmp[1]);
-                        int tmp1 = numberOfEnemiesAircrafts;
+
+                        numberOfEnemiesAircrafts = Integer.parseInt(properties.getPropValue("enemy_aircraft"));
+                        numberOfInlandAircrafts = Integer.parseInt(properties.getPropValue("inland_aircraft"));
+                        //int tmp1 = numberOfEnemiesAircrafts;
                         //int tmp2=numberOfInlandAircrafts;
 
                         if (numberOfInlandAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
 
                             addMilitaryAircraft(nextAircraft, true);
-                            numberOfInlandAircrafts--;
 
 
                         } else if (numberOfEnemiesAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
                             addMilitaryAircraft(nextAircraft, false);
-                            numberOfEnemiesAircrafts--;
 
 
                         }
-                        in.close();
-                        BufferedWriter out = new BufferedWriter(new PrintWriter(f));
-                        out.write(numberOfEnemiesAircrafts + "#" + numberOfInlandAircrafts + "\r\n" + skyX + "#" + skyY + "\r\n" + Integer.toString(timeInterval));
 
-                        out.close();
-                        timeStamp = f.lastModified();
+
+                        // timeStamp = f.lastModified();
 
                     } catch (Exception e) {
                         LoggerService logger = LoggerService.getInstance();
@@ -135,7 +105,7 @@ public class Simulator extends Thread {
 
                     String nextAircraft = aircraftToAdd[random.nextInt(8)];
                     if ("PrA".equals(nextAircraft)) {
-                        newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new PessengerAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 random.nextInt(200) + 1, random.nextDouble() * 100, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -144,7 +114,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("PrH".equals(nextAircraft)) {
-                        newAircraft = new PessengerHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new PessengerHelicopter(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 random.nextInt(200) + 1, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -153,7 +123,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("TrA".equals(nextAircraft)) {
-                        newAircraft = new TransportAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new TransportAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 random.nextDouble() * 100, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -162,7 +132,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("TrH".equals(nextAircraft)) {
-                        newAircraft = new TransportHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new TransportHelicopter(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 "Prtljaga", random.nextDouble() * 100, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -171,7 +141,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("FrA".equals(nextAircraft)) {
-                        newAircraft = new FireAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new FireAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 random.nextDouble() * 100, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -180,7 +150,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("FrH".equals(nextAircraft)) {
-                        newAircraft = new FireHelicopter(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new FireHelicopter(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 random.nextDouble() * 100, airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -189,7 +159,7 @@ public class Simulator extends Thread {
                         newAircraft.start();
 
                     } else if ("IPR".equals(nextAircraft)) {
-                        newRocket = new IceProtectionRocket(random.nextDouble() * 100, random.nextDouble() * 100, airspace);
+                        newRocket = new IceProtectionRocket(random.nextDouble() * 100, random.nextInt(2)+1, airspace);
                         newRocket.setEntrance(skyX, skyY);
 
                         rockets.put(newRocket.getIdOfRocket(), newRocket);
@@ -197,7 +167,7 @@ public class Simulator extends Thread {
                         newRocket.start();
 
                     } else if ("Drn".equals(nextAircraft)) {
-                        newAircraft = new Drone(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+                        newAircraft = new Drone(Integer.toString(random.nextInt(1000)), random.nextInt(2)+1, new HashMap<Integer, Object>(), new ArrayList(),
                                 airspace);
                         newAircraft.setEntrance(skyX, skyY);
 
@@ -208,14 +178,15 @@ public class Simulator extends Thread {
 
 
                 }
-                try {
-                    System.out.println();
-                    airspace.wait(timeInterval * 1000);
-                    //sleep(timeInterval * 1000);
-                } catch (Exception e) {
-                    LoggerService logger = LoggerService.getInstance();
-                    logger.log(Level.WARNING, e);
-                }
+
+            }
+            try {
+                System.out.println("sleep u simulatoru");
+                //airspace.wait(timeInterval * 1000);
+                sleep(timeInterval * 1000);
+            } catch (Exception e) {
+                LoggerService logger = LoggerService.getInstance();
+                logger.log(Level.WARNING, e);
             }
 
 
@@ -227,10 +198,12 @@ public class Simulator extends Thread {
     }
 
     private synchronized void sendMilitaryAircraft(Integer idOfEnemy) {
+
+
         if (idOfEnemy < 600) {
             Aircraft objectToAttack = (Aircraft) aircrafts.get(idOfEnemy);
 
-            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     true, airspace);
             newAircraftForAttack.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 1);
             newAircraftForAttack.setInAttack(true);
@@ -240,7 +213,7 @@ public class Simulator extends Thread {
             newAircraftForAttack.start();
 
 
-            Aircraft newAircraftForAttack1 = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraftForAttack1 = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     true, airspace);
             newAircraftForAttack1.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 2);
             newAircraftForAttack1.setInAttack(true);
@@ -252,7 +225,7 @@ public class Simulator extends Thread {
         } else {
             Rocket objectToAttack = (Rocket) rockets.get(idOfEnemy);
 
-            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraftForAttack = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     true, airspace);
             newAircraftForAttack.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 1);
             newAircraftForAttack.setInAttack(true);
@@ -262,7 +235,7 @@ public class Simulator extends Thread {
             newAircraftForAttack.start();
 
 
-            Aircraft newAircraftForAttack1 = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraftForAttack1 = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     true, airspace);
             newAircraftForAttack1.setEntranceForAttack(skyX, skyY, objectToAttack.getFlightIndex(), objectToAttack.getXPosition(), objectToAttack.getYPosition(), 2);
             newAircraftForAttack1.setInAttack(true);
@@ -280,26 +253,31 @@ public class Simulator extends Thread {
 
     private void addMilitaryAircraft(String mark, boolean inland) {
         if ("MHA".equals(mark)) {
-            Aircraft newAircraft = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraft = new MilitaryHunterAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     inland, airspace);
             newAircraft.setEntrance(skyX, skyY);
             aircrafts.put(newAircraft.getIdOfAircraft(), newAircraft);
             airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+            if(!inland)newAircraft.setFlightSpeed(random.nextInt(1)+2);
             newAircraft.start();
         } else if ("MBA".equals(mark)) {
-            Aircraft newAircraft = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextDouble() * 100, new HashMap<Integer, Object>(), new ArrayList(),
+            Aircraft newAircraft = new MilitaryBomberAirplane(Integer.toString(random.nextInt(1000)), random.nextInt(100), new HashMap<Integer, Object>(), new ArrayList(),
                     inland, airspace);
             newAircraft.setEntrance(skyX, skyY);
             aircrafts.put(newAircraft.getIdOfAircraft(), newAircraft);
             airspace.addObjectOnSky(newAircraft.getMark(), newAircraft.getXPosition(), newAircraft.getYPosition(), newAircraft.getIdOfAircraft());
+            if(!inland)newAircraft.setFlightSpeed(random.nextInt(1)+2);
+
             newAircraft.start();
 
         } else {
-            Rocket newRocket = new MilitaryRocket(random.nextDouble() * 100, random.nextDouble() * 100, inland, airspace);
+            Rocket newRocket = new MilitaryRocket(random.nextDouble() * 100, random.nextInt(100), inland, airspace);
             newRocket.setEntrance(skyX, skyY);
 
             rockets.put(newRocket.getIdOfRocket(), newRocket);
             airspace.addObjectOnSky(newRocket.getMark(), newRocket.getXPosition(), newRocket.getYPosition(), newRocket.getIdOfRocket());
+            if(!inland)newRocket.setFlightSpeed(random.nextInt(1)+2);
+
             newRocket.start();
         }
 

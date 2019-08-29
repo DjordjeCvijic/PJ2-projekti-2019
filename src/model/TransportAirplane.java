@@ -7,7 +7,7 @@ public class TransportAirplane extends Aircraft {
 
     private double maximumWeightOfCargo;
 
-    public TransportAirplane(String model, double height, Map characteristics, List persons, double max, Airspace a) {
+    public TransportAirplane(String model, int height, Map characteristics, List persons, double max, Airspace a) {
         super(model, height, characteristics, persons, "TrA", a);
         maximumWeightOfCargo = max;
     }

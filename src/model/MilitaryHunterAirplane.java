@@ -9,7 +9,7 @@ public class MilitaryHunterAirplane extends Aircraft {
 
     private boolean inland;
 
-    public MilitaryHunterAirplane(String model, double height, Map characteristics, List persons, boolean inland, Airspace a) {
+    public MilitaryHunterAirplane(String model, int height, Map characteristics, List persons, boolean inland, Airspace a) {
         super(model, height, characteristics, persons, "MHA", a);
         this.inland = inland;
         if (!inland) {

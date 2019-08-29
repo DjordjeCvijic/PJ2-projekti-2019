@@ -1,6 +1,8 @@
 package model;
 
+
 import java.io.Serializable;
+import java.util.Date;
 
 public class Crash implements Serializable {
     public String description;
@@ -27,6 +29,6 @@ public class Crash implements Serializable {
 
     @Override
     public String toString() {
-        return description + " " + time + " " + positionOfCrash;
+        return description + " " + new Date(Long.parseLong(time)).toString() + " Position of crash: " + positionOfCrash;
     }
 }
