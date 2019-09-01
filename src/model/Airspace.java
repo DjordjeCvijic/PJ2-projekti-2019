@@ -5,6 +5,9 @@ import applications.Simulator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import model.aircrafts.Aircraft;
+import model.rockets.Rocket;
+
 
 public class Airspace extends Thread {
 
@@ -591,11 +594,8 @@ public class Airspace extends Thread {
         return enemiesInSky;
     }
 
-    public static void incramentEnemiesInSky() {
+    public void incramentEnemiesInSky() {
 
-       /*if(enemiesInSky==-1)
-           enemiesInSky=1;
-       else enemiesInSky++;*/
         enemiesInSky++;
     }
 
@@ -613,7 +613,7 @@ public class Airspace extends Thread {
         return isEnemyInSky;
     }
 
-    public static void setIsEnemyInSky(boolean isEnemy) {
+    public  void setIsEnemyInSky(boolean isEnemy) {
         Airspace.isEnemyInSky = isEnemy;
     }
 

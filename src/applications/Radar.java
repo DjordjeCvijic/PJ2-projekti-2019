@@ -1,10 +1,10 @@
 package applications;
 
 import get_properties.GetRadarPropertyValues;
-import model.Aircraft;
+import model.aircrafts.Aircraft;
 import model.Airspace;
 import model.Crash;
-import model.Rocket;
+import model.rockets.Rocket;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -112,7 +112,6 @@ public class Radar extends Thread {
                     logger.log(Level.WARNING,e);
                 }
 
-
                 if (airspace.getNumberOfAircraftInAccidents() != 0){
                     System.out.println("pozvan crash u radaru");
                     crashInAirspace();
@@ -140,7 +139,7 @@ public class Radar extends Thread {
             String time;
             String positionOfCrash;
             Aircraft aircraft = null;
-            Rocket rocekt = null;
+            Rocket rocket = null;
             Integer[] arr = airspace.getIdsOfAircraftToEleminate();
             int first = arr[0];
             int second = arr[1];
@@ -151,8 +150,8 @@ public class Radar extends Thread {
                 aircraft = (Aircraft) Simulator.aircrafts.get(first);
                 description = aircraft.getMark()+"(id:"+aircraft.getIdOfAircraft()+")";
             } else {
-                rocekt = (Rocket) Simulator.rockets.get(first);
-                description = rocekt.getMark()+"(id:"+rocekt.getIdOfRocket()+")";
+                rocket = (Rocket) Simulator.rockets.get(first);
+                description = rocket.getMark()+"(id:"+rocket.getIdOfRocket()+")";
             }
             if (second < 600) {
 
@@ -160,9 +159,9 @@ public class Radar extends Thread {
                 description=description.concat(" and " + aircraft.getMark()+"(id:"+aircraft.getIdOfAircraft()+")");
                 positionOfCrash = aircraft.getXPosition() + " " + aircraft.getYPosition();
             } else {
-                rocekt = (Rocket) Simulator.rockets.get(second);
-                description=description.concat(" and " + rocekt.getMark()+"(id:"+rocekt.getIdOfRocket()+")");
-                positionOfCrash = rocekt.getXPosition() + " " + rocekt.getYPosition();
+                rocket = (Rocket) Simulator.rockets.get(second);
+                description=description.concat(" and " + rocket.getMark()+"(id:"+rocket.getIdOfRocket()+")");
+                positionOfCrash = rocket.getXPosition() + " " + rocket.getYPosition();
             }
 
             time = Long.toString(System.currentTimeMillis());
@@ -172,6 +171,7 @@ public class Radar extends Thread {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileAlert + File.separator + time + ".ser"));
                 oos.writeObject(c);
                 System.out.println(c.toString());
+                oos.close();
             } catch (Exception e) {
                 LoggerService logger=LoggerService.getInstance();
                 logger.log(Level.WARNING,e);

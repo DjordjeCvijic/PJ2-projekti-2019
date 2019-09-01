@@ -8,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 public class LoggerService {
     private static LoggerService loggerServiceInstance = null;
-    public static  Logger myLogger=null;
+    private static  Logger myLogger=null;
 
     public static LoggerService getInstance()
     {

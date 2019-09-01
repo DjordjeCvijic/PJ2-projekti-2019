@@ -33,7 +33,7 @@ public class SystemCopy extends Thread {
                 String name = "backup_" + tmp[5] + "_" + tmp[1] + "_" + tmp[2] + "_" + tmp1[0] + "_" + tmp1[1] + ".zip";
                 System.out.println(name);
                 String[] filesInEvents = fileEvents.list();
-                FileOutputStream fos = new FileOutputStream("src" + File.separator + "system backup" + File.separator + name);
+                FileOutputStream fos = new FileOutputStream("src" + File.separator + "system_backup" + File.separator + name);
                 ZipOutputStream zipOut = new ZipOutputStream(fos);
                 synchronized (fileMap) {
 

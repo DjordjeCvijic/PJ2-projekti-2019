@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import model.*;
+import model.aircrafts.Aircraft;
 
 
 public class MainApplicationController extends Thread implements Initializable {
@@ -132,7 +133,7 @@ public class MainApplicationController extends Thread implements Initializable {
             @Override
             public void run() {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Information Dialog");
+                alert.setTitle("Accident information");
                 alert.setHeaderText(null);
                 alert.setContentText(s);
                 alert.show();
