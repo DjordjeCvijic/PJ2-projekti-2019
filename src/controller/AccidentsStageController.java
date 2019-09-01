@@ -16,41 +16,43 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
-public class AccidentsStageController implements Initializable{
+public class AccidentsStageController implements Initializable {
     @FXML
     private TableView<AircraftsInCrush> tableView = new TableView<>();
     @FXML
-    private TableColumn<AircraftsInCrush,String > firstAircraftColumn=new TableColumn<>();
+    private TableColumn<AircraftsInCrush, String> firstAircraftColumn = new TableColumn<>();
     @FXML
-    private TableColumn<AircraftsInCrush,String > secondAircraftColumn=new TableColumn<>();
+    private TableColumn<AircraftsInCrush, String> secondAircraftColumn = new TableColumn<>();
     @FXML
-    private TableColumn<AircraftsInCrush,String > xColumn=new TableColumn<>();
+    private TableColumn<AircraftsInCrush, String> xColumn = new TableColumn<>();
     @FXML
-    private TableColumn<AircraftsInCrush,String > yColumn=new TableColumn<>();
+    private TableColumn<AircraftsInCrush, String> yColumn = new TableColumn<>();
     @FXML
-    private TableColumn<AircraftsInCrush,Date > timeColumn=new TableColumn<>();
+    private TableColumn<AircraftsInCrush, Date> timeColumn = new TableColumn<>();
 
-    public  ObservableList<AircraftsInCrush> aircraftsInCrushes = FXCollections.observableArrayList();
+    private ObservableList<AircraftsInCrush> aircraftsInCrashes = FXCollections.observableArrayList();
 
-    public void initialize(URL location, ResourceBundle resources){
-        File f=new File("src" + File.separator + "alert");
-        String[] files=f.list();
+    public void initialize(URL location, ResourceBundle resources) {
+        File f = new File("src" + File.separator + "alert");
+        String[] files = f.list();
         try {
-            for(int i=0;i<files.length;i++) {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f + File.separator + files[i]));
+            for (String s : files) {
+
+
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f + File.separator + s));
 
                 Crash crush = (Crash) ois.readObject();
-                String []info=crush.getDescription().split(" ");
-                String []info1=crush.getPositionOfCrash().split(" ");
+                String[] info = crush.getDescription().split(" ");
+                String[] info1 = crush.getPositionOfCrash().split(" ");
 
-                aircraftsInCrushes.add(new AircraftsInCrush(info[0],info[2],info1[0],info1[1],crush.getTime()));
+                aircraftsInCrashes.add(new AircraftsInCrush(info[0], info[2], info1[0], info1[1], crush.getTime()));
                 ois.close();
             }
 
 
-        }catch (Exception e){
-            LoggerService logger=LoggerService.getInstance();
-            logger.log(Level.WARNING,e);
+        } catch (Exception e) {
+            LoggerService logger = LoggerService.getInstance();
+            logger.log(Level.WARNING, e);
         }
 
         firstAircraftColumn.setCellValueFactory(new PropertyValueFactory<>("firstAircraft"));
@@ -58,7 +60,7 @@ public class AccidentsStageController implements Initializable{
         xColumn.setCellValueFactory(new PropertyValueFactory<>("xPosition"));
         yColumn.setCellValueFactory(new PropertyValueFactory<>("yPosition"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeOfCrush"));
-        tableView.setItems(aircraftsInCrushes);
+        tableView.setItems(aircraftsInCrashes);
 
 
     }
@@ -75,7 +77,7 @@ public class AccidentsStageController implements Initializable{
             this.secondAircaft = secondAircaft;
             this.xPosition = xPosition;
             this.yPosition = yPosition;
-            timeOfCrush= new Date(Long.parseLong(time));
+            timeOfCrush = new Date(Long.parseLong(time));
 
 
         }
@@ -102,8 +104,7 @@ public class AccidentsStageController implements Initializable{
             return timeOfCrush;
         }
 
-        //public String toString(){
-        //return id+" "+mark;
+
     }
 }
 

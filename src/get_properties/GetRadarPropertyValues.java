@@ -10,21 +10,18 @@ public class GetRadarPropertyValues {
 
     private String result = " ";
     private String propertyFileName = "src" + File.separator + "resources" + File.separator + "radar.properties";
-    private BufferedReader br;
+
 
     public GetRadarPropertyValues() {
     }
 
     public String getPropValue(String propertyName) {
         try {
-            Properties prop = new Properties();
-            br = new BufferedReader(new FileReader(propertyFileName));
-            System.out.println(br.readLine());
-            prop.load(br);
-            result = prop.getProperty(propertyName);
-
+            Properties property = new Properties();
+            BufferedReader br = new BufferedReader(new FileReader(propertyFileName));
+            property.load(br);
+            result = property.getProperty(propertyName);
             br.close();
-
 
         } catch (Exception e) {
             LoggerService logger = LoggerService.getInstance();

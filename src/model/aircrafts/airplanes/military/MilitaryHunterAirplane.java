@@ -18,7 +18,6 @@ public class MilitaryHunterAirplane extends Aircraft implements CarryingWeaponsI
         super(model, height, characteristics, persons, "MHA", a);
         this.inland = inland;
         if (!inland) {
-            System.out.println("strana letjelica");
             setEnemy(true);
         }
     }

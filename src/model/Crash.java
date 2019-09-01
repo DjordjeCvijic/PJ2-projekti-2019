@@ -5,9 +5,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Crash implements Serializable {
-    public String description;
-    public String time;
-    public String positionOfCrash;
+    private String description;
+    private String time;
+    private String positionOfCrash;
 
     public Crash(String d, String t, String p) {
         description = d;

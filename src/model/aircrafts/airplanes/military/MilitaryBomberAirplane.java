@@ -15,7 +15,6 @@ public class MilitaryBomberAirplane extends Aircraft implements CarryingWeaponsI
         super(model, height, characteristics, persons, "MBA", a);
         this.inland = inland;
         if (!inland) {
-            System.out.println("strana letjelica");
             setEnemy(true);
         }
     }

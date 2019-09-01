@@ -47,17 +47,16 @@ public class Simulator extends Thread {
         Rocket newRocket;
         while (true) {
             synchronized (airspace) {
-                if (stop && airspace.getNumberOfEnemisAircraft() == 0) {
+                if (stop && airspace.getNumberOfEnemiesAircraft() == 0) {
                     try {
                         airspace.wait();
-
                     } catch (Exception e) {
                         LoggerService logger = LoggerService.getInstance();
                         logger.log(Level.WARNING, e);
                     }
                 }
 
-                Integer idOfEnemy = airspace.getIdsOfEnemisAircraft();
+                Integer idOfEnemy = airspace.getIdsOfEnemiesAircraft();
                 if (idOfEnemy != 0) {
                     sendMilitaryAircraft(idOfEnemy);
 
@@ -67,17 +66,13 @@ public class Simulator extends Thread {
 
                         int numberOfEnemiesAircrafts = Integer.parseInt(properties.getPropValue("enemy_aircraft"));
                         int numberOfInlandAircrafts = Integer.parseInt(properties.getPropValue("inland_aircraft"));
-
                         if (numberOfInlandAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
-
                             addMilitaryAircraft(nextAircraft, true);
-
 
                         } else if (numberOfEnemiesAircrafts > 0) {
                             String nextAircraft = aircraftToAdd[random.nextInt(3) + 8];
                             addMilitaryAircraft(nextAircraft, false);
-
 
                         }
 
@@ -258,7 +253,7 @@ public class Simulator extends Thread {
 
 
         if (!inland) {
-            airspace.incramentEnemiesInSky();
+            airspace.incrementEnemiesInSky();
             airspace.setIsEnemyInSky(true);
             noFlightZoneActivate();
         }
@@ -276,7 +271,7 @@ public class Simulator extends Thread {
         for (Integer i : s1) {
             Rocket a = (Rocket) rockets.get(i);
             if (!a.getMark().equals("MiR"))
-                a.setCanFliy(false);
+                a.setCanFly(false);
         }
         stop = true;
         Airspace.setNoFly(true);

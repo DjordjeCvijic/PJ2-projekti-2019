@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import main.Main;
 import applications.*;
 import model.Airspace;
@@ -17,17 +16,14 @@ import java.util.logging.Level;
 
 public class StartController {
 
-    @FXML
-    private Button startBtn;
-
     public void startBtnClick(ActionEvent actionEvent) {
 
 
-        Airspace a = new Airspace();
-        Simulator s = new Simulator(a);
-        s.start();
-        Radar r = new Radar(a);
-        r.start();
+        Airspace airspace = new Airspace();
+        Simulator simulator = new Simulator(airspace);
+        simulator.start();
+        Radar radar = new Radar(airspace);
+        radar.start();
         SystemCopy sc = new SystemCopy();
         sc.start();
 

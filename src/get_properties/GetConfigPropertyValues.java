@@ -9,8 +9,6 @@ import java.util.logging.Level;
 public class GetConfigPropertyValues {
     private String result = " ";
     private String propertyFileName = "src" + File.separator + "resources" + File.separator + "config.properties";
-    private BufferedReader br;
-
 
     public GetConfigPropertyValues() {
 
@@ -18,12 +16,10 @@ public class GetConfigPropertyValues {
 
     public String getPropValue(String propertyName) {
         try {
-            Properties prop = new Properties();
-            br = new BufferedReader(new FileReader(propertyFileName));
-            System.out.println(br.readLine());
-            prop.load(br);
-            result = prop.getProperty(propertyName);
-
+            Properties property = new Properties();
+            BufferedReader br = new BufferedReader(new FileReader(propertyFileName));
+            property.load(br);
+            result = property.getProperty(propertyName);
             br.close();
 
         } catch (Exception e) {

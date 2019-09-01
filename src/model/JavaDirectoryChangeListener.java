@@ -15,7 +15,7 @@ import java.util.logging.Level;
 
 public class JavaDirectoryChangeListener extends Thread {
 
-    private  Path directoryPath;
+    private Path directoryPath;
     private String name;
 
     public JavaDirectoryChangeListener(Path dir, String n) {
@@ -45,19 +45,18 @@ public class JavaDirectoryChangeListener extends Thread {
                 if (!watchKey.reset()) {
                     watchKey.cancel();
                     watchService.close();
-                    System.out.println("Watch directory got deleted. Stop watching it.");
                     //Break out from the loop
                     break;
                 }
             }
 
         } catch (InterruptedException e) {
-            LoggerService logger=LoggerService.getInstance();
-            logger.log(Level.WARNING,e);
+            LoggerService logger = LoggerService.getInstance();
+            logger.log(Level.WARNING, e);
             return;
         } catch (Exception e) {
-            LoggerService logger=LoggerService.getInstance();
-            logger.log(Level.WARNING,e);
+            LoggerService logger = LoggerService.getInstance();
+            logger.log(Level.WARNING, e);
             return;
         }
 
@@ -69,23 +68,22 @@ public class JavaDirectoryChangeListener extends Thread {
 
         if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
             Path entryCreated = (Path) event.context();
-            //System.out.println("New entry created:" + entryCreated);
 
             if (name.equals("events")) {
-               // System.out.println("Strana letjelica"+name);
+
                 MainApplicationController.setInfoText("Worning enemy aircraft");
-           }
-            if(name.equals("alert")) {
-               // System.out.println("sudar"+name);
-                MainApplicationController.newCrach();
+            }
+            if (name.equals("alert")) {
+
+                MainApplicationController.newCrash();
             }
 
         } else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
             Path entryDeleted = (Path) event.context();
-           // System.out.println("Exissting entry deleted:" + entryDeleted);
+
         } else if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
             Path entryModified = (Path) event.context();
-            //System.out.println("Existing entry modified:" + entryModified);
+
         }
     }
 }

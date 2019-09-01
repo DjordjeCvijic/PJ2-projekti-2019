@@ -17,7 +17,7 @@ public class Rocket extends Thread {
     private int yPosition;
     private int flightIndex;
     private Airspace airspace;
-    private boolean canFliy = true;
+    private boolean canFly = true;
     private boolean enemy = false;
 
     public Rocket() {
@@ -76,7 +76,7 @@ public class Rocket extends Thread {
         int c = 0;
         do {
 
-            if (canFliy) {
+            if (canFly) {
                 try {
                     sleep(flightSpeed * 1000);
 
@@ -124,20 +124,19 @@ public class Rocket extends Thread {
                 }
 
             }
-            System.out.println("index: "+id+" pozicije "+xPosition+" "+yPosition);
 
         } while (c != -1);
-        airspace.remuveIdsOfAircraftInAccidents(id);
+        airspace.removeIdsOfAircraftInAccidents(id);
         if (enemy) {
-            Airspace.decramentEnemiesInSky();
+            Airspace.decrementEnemiesInSky();
             Simulator.noFlightZoneDeactivate();
         }
     }
 
-    private int modFlightIndex(int indeks) {
+    private int modFlightIndex(int index) {
         int min;
-        int newIndex = indeks;
-        if (indeks == 0) {
+        int newIndex = index;
+        if (index == 0) {
             min = yPosition;
             if (xPosition < min) {
                 min = xPosition;
@@ -148,7 +147,7 @@ public class Rocket extends Thread {
             }
 
 
-        } else if (indeks == 1) {
+        } else if (index == 1) {
             min = xPosition;
             if (yPosition < min) {
                 min = yPosition;
@@ -158,7 +157,7 @@ public class Rocket extends Thread {
                 newIndex = 2;
             }
 
-        } else if (indeks == 2) {
+        } else if (index == 2) {
             min = airspace.getSkyY() - 1 - yPosition;
             if (airspace.getSkyX() - 1 - xPosition < min) {
                 min = airspace.getSkyX() - 1 - xPosition;
@@ -184,8 +183,8 @@ public class Rocket extends Thread {
     }
 
 
-    public void setCanFliy(boolean canFliy) {
-        this.canFliy = canFliy;
+    public void setCanFly(boolean canFly) {
+        this.canFly = canFly;
     }
 
     public boolean isEnemy() {

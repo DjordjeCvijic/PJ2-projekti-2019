@@ -1,12 +1,10 @@
 package applications;
 
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Date;
-
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -27,11 +25,9 @@ public class SystemCopy extends Thread {
                 sleep(60000);
 
                 Date date = new Date();
-                System.out.println(date);
                 String[] tmp = date.toString().split(" ");
                 String[] tmp1 = tmp[3].split(":");
                 String name = "backup_" + tmp[5] + "_" + tmp[1] + "_" + tmp[2] + "_" + tmp1[0] + "_" + tmp1[1] + ".zip";
-                System.out.println(name);
                 String[] filesInEvents = fileEvents.list();
                 FileOutputStream fos = new FileOutputStream("src" + File.separator + "system_backup" + File.separator + name);
                 ZipOutputStream zipOut = new ZipOutputStream(fos);
@@ -69,11 +65,10 @@ public class SystemCopy extends Thread {
                 }
 
 
-
-
             } catch (Exception e) {
-                LoggerService logger=LoggerService.getInstance();
-                logger.log(Level.WARNING,e);            }
+                LoggerService logger = LoggerService.getInstance();
+                logger.log(Level.WARNING, e);
+            }
         }
 
     }

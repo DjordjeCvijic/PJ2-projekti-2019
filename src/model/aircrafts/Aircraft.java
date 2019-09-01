@@ -28,16 +28,12 @@ public class Aircraft extends Thread {
     private boolean enemy = false;
     private boolean inAttack = false;
     private int idToAttack = 0;
-
     private Airspace airspace;
-
     private String mark;
 
     public int getFlightIndex() {
         return flightIndex;
     }
-
-
 
     public Aircraft() {
     }
@@ -73,7 +69,6 @@ public class Aircraft extends Thread {
 
     public void setEntrance(int skyX, int skyY) {
 
-        // System.out.println("u set ulaz,dimezije mape"+skyX+" "+skyY);//mmmmmmmm
         Random random = new Random();
         flightIndex = random.nextInt(4);
         if (flightIndex == 0) {
@@ -90,26 +85,9 @@ public class Aircraft extends Thread {
             yPosition = random.nextInt(skyY);
         }
 
-        //System.out.println("u set ulaz,i ideks leta:"+xPosition+" "+yPosition +flightIndex);//mmmmmmm
-    }
-
-    public void setEntrance1(int skyX, int skyY) {
-        flightIndex = 2;
-
-        yPosition = 0;
-        xPosition = 1;
-
-
-    }//za testiranje sudara
-
-    public void setEntrance2(int skyX, int skyY) {
-        flightIndex = 0;
-
-        yPosition = skyY - 1;
-        xPosition = 1;
-
 
     }
+
 
     public void setEntranceForAttack(int skyX, int skyY, int flightIndex, int xPositionOfEnemy, int yPositionOfEnemy, int num) {
         this.flightIndex = flightIndex;
@@ -202,22 +180,17 @@ public class Aircraft extends Thread {
 
         int c = 0;
         do {
-            //if (isEnemy() && airspace.check(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight)) {
-               // c = -1;
 
-            //} else
             if (canFly) {
                 try {
                     sleep(flightSpeed * 1000);
 
                 } catch (Exception e) {
-                    LoggerService logger=LoggerService.getInstance();
-                    logger.log(Level.WARNING,e);
+                    LoggerService logger = LoggerService.getInstance();
+                    logger.log(Level.WARNING, e);
                 }
-                // System.out.println("u ranu letjelice pozicije"+xPosition+" "+yPosition);
-
                 c = airspace.flight(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight);
-                //System.out.println("u ranu letjelice pozicije i ideks"+xPosition+" "+yPosition+" "+c);
+
                 if (c == 0) {
                     yPosition--;
 
@@ -236,14 +209,13 @@ public class Aircraft extends Thread {
 
             } else {
                 try {
-                    sleep(flightSpeed * 1000);//mozda ne treba
+                    sleep(flightSpeed * 1000);
 
                 } catch (Exception e) {
-                    LoggerService logger=LoggerService.getInstance();
-                    logger.log(Level.WARNING,e);
+                    LoggerService logger = LoggerService.getInstance();
+                    logger.log(Level.WARNING, e);
                 }
                 flightIndex = modFlightIndex(flightIndex);//indesk za skretanje
-                // System.out.println(flightIndex);
                 c = airspace.flight(xPosition, yPosition, flightIndex, mark, id, heightOfTheFlight);
                 if (c == 0) {
                     yPosition--;
@@ -261,13 +233,11 @@ public class Aircraft extends Thread {
                 }
 
             }
-            System.out.println("index: "+id+" pozicije "+xPosition+" "+yPosition);
 
         } while (c != -1);
-        airspace.remuveIdsOfAircraftInAccidents(id);
-        System.out.println("izasao " + id);
+        airspace.removeIdsOfAircraftInAccidents(id);
         if (enemy) {
-            Airspace.decramentEnemiesInSky();
+            Airspace.decrementEnemiesInSky();
             Simulator.noFlightZoneDeactivate();
         }
 
@@ -275,11 +245,10 @@ public class Aircraft extends Thread {
     }
 
 
-
-    private int modFlightIndex(int indeks) {
+    private int modFlightIndex(int index) {
         int min;
-        int newIndex = indeks;
-        if (indeks == 0) {
+        int newIndex = index;
+        if (index == 0) {
             min = yPosition;
             if (xPosition < min) {
                 min = xPosition;
@@ -290,7 +259,7 @@ public class Aircraft extends Thread {
             }
 
 
-        } else if (indeks == 1) {
+        } else if (index == 1) {
             min = xPosition;
             if (yPosition < min) {
                 min = yPosition;
@@ -300,7 +269,7 @@ public class Aircraft extends Thread {
                 newIndex = 2;
             }
 
-        } else if (indeks == 2) {
+        } else if (index == 2) {
             min = airspace.getSkyY() - 1 - yPosition;
             if (airspace.getSkyX() - 1 - xPosition < min) {
                 min = airspace.getSkyX() - 1 - xPosition;
@@ -320,8 +289,6 @@ public class Aircraft extends Thread {
                 newIndex = 0;
             }
         }
-
-
         return newIndex;
     }
 

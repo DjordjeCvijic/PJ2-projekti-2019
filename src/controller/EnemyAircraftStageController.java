@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,7 +13,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,19 +35,19 @@ public class EnemyAircraftStageController implements Initializable{
 
 
 
-    public  ObservableList<EnemyMillitaryAircraft> enemis = FXCollections.observableArrayList();
+    private   ObservableList<EnemyMillitaryAircraft> enemis = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         File f=new File("src" + File.separator + "events");
         String[] files=f.list();
         try {
-            for(int i=0;i<files.length;i++) {
-                BufferedReader out = new BufferedReader(new FileReader(f + File.separator + files[i]));
+            for (String filesName:files) {
+                BufferedReader out = new BufferedReader(new FileReader(f + File.separator + filesName));
                 String s = out.readLine();
                 String[] info=s.split("#");
-                int index=files[i].indexOf(".");
-                String time=files[i].substring(0,index);
+                int index=filesName.indexOf(".");
+                String time=filesName.substring(0,index);
                 enemis.add(new EnemyMillitaryAircraft(info[0],info[1],info[2],info[3],time));
                 out.close();
             }
